@@ -17,3 +17,8 @@ def index():
         
     return render_template('index.html', taskList=taskList)    
     
+
+@app.route('/add', methods = ['POST'])
+def add_Task():
+    
+    newItem = add_item('')
