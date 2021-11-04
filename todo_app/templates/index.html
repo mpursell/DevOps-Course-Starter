@@ -16,6 +16,17 @@
         <li>{{ task.id }}:  {{ task.status }}:  {{ task.title }}</li>
         {% endfor %}
       </ul>
+
+      <form action ='/add' method='POST'>
+      
+      <fieldset>
+        <legend>Add Task</legend>
+        <input type="text" name='newTask'>
+        <button>Add Task</button>
+      </fieldset>
+      
+      </form>
+
     </div>
   </div>
 {% endblock %}
