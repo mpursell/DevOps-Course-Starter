@@ -5,6 +5,7 @@ from flask import request
 from todo_app.flask_config import Config
 from todo_app.data.session_items import get_items
 from todo_app.data.session_items import add_item
+from werkzeug.utils import redirect
 
 
 app = Flask(__name__)
@@ -29,4 +30,7 @@ def add_Task():
 
     # get all the list items again, including the new item
     taskList = get_items()
-    return render_template('index.html', taskList=taskList)
+
+    # send user back to starting app route
+    return redirect('/')
+    
