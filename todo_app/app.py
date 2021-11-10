@@ -27,10 +27,7 @@ def add_Task():
     # add it to the list
     newTask = request.form.get('newTask')
     add_item(newTask)
-
-    # get all the list items again, including the new item
-    taskList = get_items()
-
+    
     # send user back to starting app route
     return redirect('/')
     
