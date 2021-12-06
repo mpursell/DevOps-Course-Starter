@@ -67,7 +67,7 @@ def get_items() -> list:
         dict: JSON from the API parsed to a dict.
     """
 
-    requestAuthPayload = {'boardID': boardID, 'key': apiKey, 'token': apiToken}
+    requestAuthPayload = {'key': apiKey, 'token': apiToken}
 
     url = 'https://api.trello.com/1/boards/{}/cards?'.format(boardID)
     response = requests.get(url, params=requestAuthPayload)
@@ -83,11 +83,10 @@ def get_items() -> list:
         task.idBoard = item['idBoard']
         task.description = item['desc']
         
-        print(task.name)
-        print(task.id)
+
         taskList.append(task)
 
-    # want to return a list of "task" objects with name, idShort, idBoard, id, description
+    # return list of objects with required attributes
     return taskList
  
 
