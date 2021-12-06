@@ -11,7 +11,7 @@ _DEFAULT_ITEMS = [
     { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
 ]
 """
-class Task:
+class Card:
         
     @property
     def name(self):
@@ -112,24 +112,25 @@ def get_items() -> list:
 
     returnedList = response.json()
 
-    taskList =[]
+    cardList =[]
     for item in returnedList:
-        task = Task()
-        task.name = item['name']
-        task.id = item['id']
-        task.idShort = item['idShort']
-        task.idBoard = item['idBoard']
-        task.description = item['desc']
-        task.listName = get_list(task.id)
+        card = Card()
+        card.name = item['name']
+        card.id = item['id']
+        card.idShort = item['idShort']
+        card.idBoard = item['idBoard']
+        card.description = item['desc']
+        card.listName = get_list(card.id)
         
-        taskList.append(task)
+        cardList.append(card)
 
     # return list of objects with required attributes
-    return taskList
+    return cardList
 
 def get_list(cardID: str) -> str:
     """
     Gets the parent list for a given Trello card ID
+    Trello cards are tasks for our purposes: Board -> List -> Cards/tasks
     """
     apiCall = Api_request()
     apiCall.url = 'https://api.trello.com/1/cards/{}/list'.format(cardID)

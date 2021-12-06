@@ -12,8 +12,9 @@
       <h2>Items</h2>
       <ul class="list-group mb-4">
         <!-- List the todo items here -->
-        {% for task in taskList %}
-        <li>{{task.listName}} : {{task.idShort}} : {{task.name}} : {{task.description}} : {{task.id}}</li>
+        <li>List Name : Card Number : Name : Description : ID</li>
+        {% for card in cardList %}
+        <li>{{card.listName}} : {{card.idShort}} : {{card.name}} : {{card.description}} : {{card.id}}</li>
         {% endfor %}
       </ul>
 

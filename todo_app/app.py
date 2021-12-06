@@ -15,10 +15,10 @@ app.config.from_object(Config())
 @app.route('/')
 def index():
 
-    taskList = get_items()
+    cardList = get_items()
     
         
-    return render_template('index.html', taskList=taskList)    
+    return render_template('index.html', cardList=cardList)    
     
 
 @app.route('/add', methods = ['POST'])
