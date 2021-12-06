@@ -3,8 +3,8 @@ from flask import render_template
 from flask import request
 
 from todo_app.flask_config import Config
-from todo_app.data.session_items import get_items
-from todo_app.data.session_items import add_item
+from todo_app.data.trello_items import get_items
+from todo_app.data.trello_items import add_item
 from werkzeug.utils import redirect
 
 
@@ -16,6 +16,7 @@ app.config.from_object(Config())
 def index():
 
     taskList = get_items()
+    
         
     return render_template('index.html', taskList=taskList)    
     

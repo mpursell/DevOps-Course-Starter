@@ -13,7 +13,7 @@
       <ul class="list-group mb-4">
         <!-- List the todo items here -->
         {% for task in taskList %}
-        <li>{{ task.id }}:  {{ task.status }}:  {{ task.title }}</li>
+        <li>{{task.idShort}} : {{task.name}} : {{task.description}} : {{task.id}}</li>
         {% endfor %}
       </ul>
 
