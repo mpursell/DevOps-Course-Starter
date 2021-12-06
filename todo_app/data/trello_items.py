@@ -11,7 +11,7 @@ _DEFAULT_ITEMS = [
     { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
 ]
 """
-class Task():
+class Task:
         
     @property
     def name(self):
@@ -33,7 +33,7 @@ class Task():
 
     @property
     def idShort(self):
-        return self._name
+        return self._idShort
 
     @idShort.setter
     def idShort(self, value):
@@ -42,6 +42,8 @@ class Task():
 
     @property
     def description(self):
+        if self._description == "":
+            self._description = "No description available"
         return self._description
 
     @description.setter
@@ -58,19 +60,36 @@ class Task():
         self._idBoard = value
         return self._idBoard
 
+class Api_request:
+
+    def __init__(self):
+        self.requestAuthPayload = {'key': apiKey, 'token': apiToken}
+
+    @property
+    def url(self):
+        return self._url
+
+    @url.setter
+    def url(self, value):
+        self._url = value
+        return self._url
+
 
 def get_items() -> list:
     """
     Fetches all cards on the given Trello board ID.
 
     Returns:
-        dict: JSON from the API parsed to a dict.
+        list: JSON from the API parsed to a list of dictionaries.
     """
 
-    requestAuthPayload = {'key': apiKey, 'token': apiToken}
+    #requestAuthPayload = {'key': apiKey, 'token': apiToken}
+    #url = 'https://api.trello.com/1/boards/{}/cards?'.format(boardID)
 
-    url = 'https://api.trello.com/1/boards/{}/cards?'.format(boardID)
-    response = requests.get(url, params=requestAuthPayload)
+    apiCall = Api_request()
+    apiCall.url = 'https://api.trello.com/1/boards/{}/cards?'.format(boardID)
+    
+    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
 
     returnedList = response.json()
 
@@ -88,7 +107,12 @@ def get_items() -> list:
 
     # return list of objects with required attributes
     return taskList
- 
+
+def get_board_name(id: str) -> str:
+    """
+    Gets a Trello board name with a given board id
+    """
+    
 
 
 def get_item(id):
@@ -102,7 +126,7 @@ def get_item(id):
         item: The saved item, or None if no items match the specified ID.
     """
     items = get_items()
-    return next((item for item in items if item['id'] == int(id)), None)
+    return next((item for item in items if item['id'] == str(id)), None)
 
 
 def add_item(title):
