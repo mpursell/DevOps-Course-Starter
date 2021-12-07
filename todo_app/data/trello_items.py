@@ -157,8 +157,7 @@ def get_list_by_name(listName: str) -> str:
     for trelloList in returnedList:
         if trelloList['name'] == listName:
             return trelloList['id']
-        else:
-            return None
+        
 
 
 
@@ -195,12 +194,8 @@ def add_item(title: str, description: str, idList: str) -> dict:
     apiCall = Api_request()
     apiCall.url = 'https://api.trello.com/1/cards/?idList={}&name={}&desc={}'.format(idList, title, description)
 
-    print(apiCall.url)
-
     response = requests.post(apiCall.url, params=apiCall.requestAuthPayload)
-
     item = response.json()
-    print(item)
 
     return item
 

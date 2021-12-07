@@ -3,7 +3,7 @@ from flask import render_template
 from flask import request
 
 from todo_app.flask_config import Config
-from todo_app.data.trello_items import get_items
+from todo_app.data.trello_items import get_items, get_list_by_name
 from todo_app.data.trello_items import add_item
 from werkzeug.utils import redirect
 
@@ -28,7 +28,14 @@ def add_Task():
     # add it to the list
     title = request.form.get('title')
     description = request.form.get('description')
-    add_item(title, description, "61ade84dfee5c95cfb92ec05") # currently using To-Do List ID
+    list = request.form.get('listName')
+    print(list)
+
+    listId = get_list_by_name(list)
+    print (listId)
+    
+
+    add_item(title, description, listId) 
     
     # send user back to starting app route
     return redirect('/')
