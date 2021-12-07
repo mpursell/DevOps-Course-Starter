@@ -26,8 +26,9 @@ def add_Task():
     
     # get the title data from the Add Task form field in index.html
     # add it to the list
-    newTask = request.form.get('newTask')
-    add_item(newTask)
+    title = request.form.get('title')
+    description = request.form.get('description')
+    add_item(title, description, "61ade84dfee5c95cfb92ec05") # currently using To-Do List ID
     
     # send user back to starting app route
     return redirect('/')

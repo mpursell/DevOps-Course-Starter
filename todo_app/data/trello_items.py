@@ -131,6 +131,9 @@ def get_list(cardID: str) -> str:
     """
     Gets the parent list for a given Trello card ID
     Trello cards are tasks for our purposes: Board -> List -> Cards/tasks
+
+    Args: 
+        cardID: The ID of the card / task
     """
     apiCall = Api_request()
     apiCall.url = 'https://api.trello.com/1/cards/{}/list'.format(cardID)
@@ -143,6 +146,20 @@ def get_list(cardID: str) -> str:
 
     return list.name
     
+def get_list_by_name(listName: str) -> str:
+
+    apiCall = Api_request()
+    apiCall.url = 'https://api.trello.com/1/boards/{}/lists'.format(boardID)
+
+    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
+    returnedList = response.json()
+
+    for trelloList in returnedList:
+        if trelloList['name'] == listName:
+            return trelloList['id']
+        else:
+            return None
+
 
 
 def get_item(id):
@@ -159,26 +176,31 @@ def get_item(id):
     return next((item for item in items if item['id'] == str(id)), None)
 
 
-def add_item(title):
+def add_item(title: str, description: str, idList: str) -> dict:
     """
-    Adds a new item with the specified title to the session.
+    Adds a new card with the specified title and description to the Trello board.
 
     Args:
         title: The title of the item.
+        description: The task description.
+        listName: The id of the list you want to add the card to
 
     Returns:
         item: The saved item.
     """
-    items = get_items()
 
-    # Determine the ID for the item based on that of the previously added item
-    id = items[-1]['id'] + 1 if items else 0
+    title = title.replace(" ", "%20")
+    description = description.replace(" ", "%20")
 
-    item = { 'id': id, 'title': title, 'status': 'Not Started' }
+    apiCall = Api_request()
+    apiCall.url = 'https://api.trello.com/1/cards/?idList={}&name={}&desc={}'.format(idList, title, description)
 
-    # Add the item to the list
-    items.append(item)
-    session['items'] = items
+    print(apiCall.url)
+
+    response = requests.post(apiCall.url, params=apiCall.requestAuthPayload)
+
+    item = response.json()
+    print(item)
 
     return item
 
