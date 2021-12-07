@@ -29,14 +29,15 @@ def add_Task():
     title = request.form.get('title')
     description = request.form.get('description')
     list = request.form.get('listName')
-    print(list)
-
     listId = get_list_by_name(list)
-    print (listId)
     
-
     add_item(title, description, listId) 
     
     # send user back to starting app route
     return redirect('/')
+    
+
+@app.route('/update', methods=['PUT'])
+def complete_Task():
+
     
