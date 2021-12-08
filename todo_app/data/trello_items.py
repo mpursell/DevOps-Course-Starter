@@ -5,12 +5,7 @@ apiKey = os.environ.get('API_KEY')
 apiToken = os.environ.get('API_TOKEN')
 boardID = os.environ.get('TRELLO_BOARD_ID')
 
-"""
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
-"""
+
 class Card:
         
     @property
@@ -87,15 +82,19 @@ class Api_request:
     def __init__(self):
         self.requestAuthPayload = {'key': apiKey, 'token': apiToken}
 
-    @property
-    def url(self):
-        return self._url
+        @property
+        def url(self):
+            return self._url
 
-    @url.setter
-    def url(self, value):
-        self._url = value
-        return self._url
+        @url.setter
+        def url(self, value):
+            self._url = value
+            return self._url
 
+    def make_call(self, url):
+        url = self._url
+
+        return requests.get(self.url, params=self.requestAuthPayload)
 
 def get_items() -> list:
     """
@@ -199,6 +198,21 @@ def add_item(title: str, description: str, idList: str) -> dict:
 
     return item
 
+
+def complete_item(id:str) -> dict:
+
+    """
+    Allows a task to be marked as "Done", or moved to the "Done" Trello list
+    
+    Args: id: the id of the item to be moved
+    """
+
+    idList = get_list_by_name('Done')
+
+    apiCall = Api_request()
+    apiCall.url = 'https://api.trello.com/1/cards/{}}?idList={}'.format(id, idList)
+    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
+    #apiCall.make_call('https://api.trello.com/1/cards/{}}?idList={}'.format(id, idList))
 
 def save_item(item):
     """
