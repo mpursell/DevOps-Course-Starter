@@ -166,9 +166,6 @@ def get_list_by_name(listName: str) -> str:
     for trelloList in returnedList:
         if trelloList['name'] == listName:
             return trelloList['id']
-        
-
-
 
 def get_item(id):
     """
@@ -209,7 +206,7 @@ def add_item(title: str, description: str, idList: str) -> dict:
     return item
 
 
-def complete_item(id:str) -> dict:
+def complete_item(id:str, idList:str) -> dict:
 
     """
     Allows a task to be marked as "Done", or moved to the "Done" Trello list
@@ -217,11 +214,13 @@ def complete_item(id:str) -> dict:
     Args: id: the id of the item to be moved
     """
 
-    idList = get_list_by_name('Done')
-
+    #idList = get_list_by_name('Done')
+    print(f'task = {id}')
+    print(f'list = {idList}')
+    print(f'https://api.trello.com/1/cards/{id}?idList={idList}')
     apiCall = Api_request()
-    apiCall.url = 'https://api.trello.com/1/cards/{}}?idList={}'.format(id, idList)
-    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
+    apiCall.url = f'https://api.trello.com/1/cards/{id}?idList={idList}'
+    response = requests.put(apiCall.url, params=apiCall.requestAuthPayload)
     #apiCall.make_call('https://api.trello.com/1/cards/{}}?idList={}'.format(id, idList))
 
 def save_item(item):

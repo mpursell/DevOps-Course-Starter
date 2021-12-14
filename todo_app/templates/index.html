@@ -17,9 +17,10 @@
 
         <li><b>List: </b>{{card.listName}}</br> 
           <b>ID: </b>{{card.idShort}}</br>
-          <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskDescription=card.description)}}">{{card.name}}</a></br>
+          <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
           <b>Task Description: </b>{{card.description}}</br>
         </li>
+        <br>
         {% endfor %}
       </ul>
     

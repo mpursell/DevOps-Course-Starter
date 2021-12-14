@@ -43,18 +43,21 @@ def get_Task():
     taskId = request.args.get('taskId')
     taskName = request.args.get('taskName')
     taskDescription = request.args.get('taskDescription')
+    taskListName =  request.args.get('taskListName')
 
-    return render_template('task.html', taskId=taskId, taskName=taskName, taskDescription=taskDescription)
-
-    
-
-    
-
+    return render_template('task.html', taskId=taskId, taskName=taskName, taskListName=taskListName, taskDescription=taskDescription)
 
     
 
-@app.route('/update', methods=['PUT'])
+
+@app.route('/update/', methods=['GET','PUT'])
 def complete_Task():
+    
+    updateTaskListName = request.args.get('taskStatus')
+    listId = get_list_by_name(updateTaskListName)
 
+    taskId = request.args.get('taskId')
+   
+    complete_item(taskId, listId)
 
-    complete_item(id)
+    return redirect('/')

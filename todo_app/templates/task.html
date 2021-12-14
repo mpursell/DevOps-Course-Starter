@@ -11,17 +11,21 @@
     <div class="col-md">
       <h2>{{taskName}}</h2>
       <p>{{taskDescription}}</p>
+      <br>
+      <p>Status: {{taskListName}}</p>
+      <br>
+      <a href = "{{url_for('complete_Task', taskId=taskId, taskStatus='Done')}}">Complete Task</a>
 
-      <form action='/update' method='PUT'>
+      <!-- <form action='/update' method='PUT'>
         <fieldset>
           <input type="radio" value="To Do" name="updateTask" > To Do
           <input type="radio" value="Doing" name="updateTask"> Doing
           <input type="radio" value="Done" name="updateTask"> Done
           <br>
           <br>
-          <button>Update Task</button>
+          
         </fieldset>
-      </form> 
+      </form>  -->
       
   </div>
 {% endblock %}
