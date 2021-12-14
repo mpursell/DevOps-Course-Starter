@@ -1,10 +1,11 @@
 from flask import Flask
 from flask import render_template
-from flask import request
+from flask import request, url_for
 
 from todo_app.flask_config import Config
 from todo_app.data.trello_items import get_items, get_list_by_name
 from todo_app.data.trello_items import add_item
+from todo_app.data.trello_items import complete_item
 from werkzeug.utils import redirect
 
 
@@ -35,9 +36,25 @@ def add_Task():
     
     # send user back to starting app route
     return redirect('/')
+
+@app.route('/task/', methods =['GET'])
+def get_Task():
+
+    taskId = request.args.get('taskId')
+    taskName = request.args.get('taskName')
+    taskDescription = request.args.get('taskDescription')
+
+    return render_template('task.html', taskId=taskId, taskName=taskName, taskDescription=taskDescription)
+
+    
+
+    
+
+
     
 
 @app.route('/update', methods=['PUT'])
 def complete_Task():
 
-    pass
+
+    complete_item(id)

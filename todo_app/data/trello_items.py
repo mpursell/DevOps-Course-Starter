@@ -66,6 +66,15 @@ class Card:
             self._listName = "No Name Found" 
         return self._listName
 
+    @property
+    def taskUrl(self):
+        return self._taskUrl
+    
+    @taskUrl.setter
+    def taskUrl(self, value):
+        self._taskUrl = value
+        return self._taskUrl
+
 class List:
 
     @property
@@ -120,6 +129,7 @@ def get_items() -> list:
         card.idBoard = item['idBoard']
         card.description = item['desc']
         card.listName = get_list(card.id)
+        card.taskUrl = f'/tasks/?taskId={card.id}'
         
         cardList.append(card)
 

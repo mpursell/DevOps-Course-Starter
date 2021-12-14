@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %}To-Do App{% endblock %}
+
+{% block content %}
+  <div class="jumbotron">
+    <h1 class="display-4">To-Do App</h1>
+    <p class="lead">Just another to-do app.</p>
+  </div>
+
+  <div class="row">
+    <div class="col-md">
+      <h2>{{taskName}}</h2>
+      <p>{{taskDescription}}</p>
+
+      <form action='/update' method='PUT'>
+        <fieldset>
+          <input type="radio" value="To Do" name="updateTask" > To Do
+          <input type="radio" value="Doing" name="updateTask"> Doing
+          <input type="radio" value="Done" name="updateTask"> Done
+          <br>
+          <br>
+          <button>Update Task</button>
+        </fieldset>
+      </form> 
+      
+  </div>
+{% endblock %}
