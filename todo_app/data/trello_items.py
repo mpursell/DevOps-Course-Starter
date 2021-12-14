@@ -74,7 +74,6 @@ class Card:
     def taskUrl(self, value):
         self._taskUrl = value
         return self._taskUrl
-
 class List:
 
     @property
@@ -85,7 +84,6 @@ class List:
     def name(self, value: str):
         self._name = value
         return self._name
-
 class Api_request:
 
     def __init__(self):
@@ -104,6 +102,9 @@ class Api_request:
         url = self._url
 
         return requests.get(self.url, params=self.requestAuthPayload)
+
+
+
 
 def get_items() -> list:
     """
@@ -136,6 +137,7 @@ def get_items() -> list:
     # return list of objects with required attributes
     return cardList
 
+
 def get_list(cardID: str) -> str:
     """
     Gets the parent list for a given Trello card ID
@@ -154,7 +156,8 @@ def get_list(cardID: str) -> str:
     list.name = returnedDict['name']
 
     return list.name
-    
+
+
 def get_list_by_name(listName: str) -> str:
 
     apiCall = Api_request()
@@ -166,6 +169,7 @@ def get_list_by_name(listName: str) -> str:
     for trelloList in returnedList:
         if trelloList['name'] == listName:
             return trelloList['id']
+
 
 def get_item(id):
     """
@@ -209,30 +213,12 @@ def add_item(title: str, description: str, idList: str) -> dict:
 def complete_item(id:str, idList:str) -> dict:
 
     """
-    Allows a task to be marked as "Done", or moved to the "Done" Trello list
+    Allows a task to be moved to a given Trello list
     
     Args: id: the id of the item to be moved
+          idList : the id of the list to move the item to
     """
 
-    #idList = get_list_by_name('Done')
-    print(f'task = {id}')
-    print(f'list = {idList}')
-    print(f'https://api.trello.com/1/cards/{id}?idList={idList}')
     apiCall = Api_request()
     apiCall.url = f'https://api.trello.com/1/cards/{id}?idList={idList}'
     response = requests.put(apiCall.url, params=apiCall.requestAuthPayload)
-    #apiCall.make_call('https://api.trello.com/1/cards/{}}?idList={}'.format(id, idList))
-
-def save_item(item):
-    """
-    Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
-
-    Args:
-        item: The item to save.
-    """
-    existing_items = get_items()
-    updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
-
-    session['items'] = updated_items
-
-    return item

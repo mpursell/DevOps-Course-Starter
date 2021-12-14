@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template
-from flask import request, url_for
+from flask import request
 
 from todo_app.flask_config import Config
 from todo_app.data.trello_items import get_items, get_list_by_name
@@ -17,16 +17,13 @@ app.config.from_object(Config())
 def index():
 
     cardList = get_items()
-    
-        
+     
     return render_template('index.html', cardList=cardList)    
     
 
 @app.route('/add', methods = ['POST'])
 def add_Task():
     
-    # get the title data from the Add Task form field in index.html
-    # add it to the list
     title = request.form.get('title')
     description = request.form.get('description')
     list = request.form.get('listName')
@@ -34,8 +31,8 @@ def add_Task():
     
     add_item(title, description, listId) 
     
-    # send user back to starting app route
     return redirect('/')
+
 
 @app.route('/task/', methods =['GET'])
 def get_Task():
@@ -47,11 +44,25 @@ def get_Task():
 
     return render_template('task.html', taskId=taskId, taskName=taskName, taskListName=taskListName, taskDescription=taskDescription)
 
-    
-
 
 @app.route('/update/', methods=['GET','PUT'])
 def complete_Task():
+    
+    updateTaskListName = request.args.get('taskStatus')
+    listId = get_list_by_name(updateTaskListName)
+
+    taskId = request.args.get('taskId')
+   
+    complete_item(taskId, listId)
+
+    return redirect('/')
+
+
+@app.route('/update/', methods=['GET','PUT'])
+def update_Task():
+    """
+    Not required for module 2 task, just added for practice
+    """
     
     updateTaskListName = request.args.get('taskStatus')
     listId = get_list_by_name(updateTaskListName)

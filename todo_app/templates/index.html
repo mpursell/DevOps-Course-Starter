@@ -9,21 +9,48 @@
 
   <div class="row">
     <div class="col-md">
-      <h2>Items</h2>
-      <ul class="list-group mb-4">
-        <!-- List the todo items here -->
 
-        {% for card in cardList %}
-
+      <h4>To-do</h4>
+      {% for card in cardList %}
+        {% if card.listName == 'To Do'%}
         <li><b>List: </b>{{card.listName}}</br> 
           <b>ID: </b>{{card.idShort}}</br>
           <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
           <b>Task Description: </b>{{card.description}}</br>
         </li>
         <br>
+          {% endif %}
         {% endfor %}
       </ul>
-    
+      </div>
+      <div class="col-md">
+      <h4>Doing</h4>
+      {% for card in cardList %}
+      {% if card.listName == 'Doing'%} 
+        <b>ID: </b>{{card.idShort}}</br>
+        <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
+        <b>Task Description: </b>{{card.description}}</br>
+      </li>
+      <br>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    </div>
+
+    <div class="col-md">
+      <h4>Done</h4>
+      {% for card in cardList %}
+      {% if card.listName == 'Done'%}
+        <b>ID: </b>{{card.idShort}}</br>
+        <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
+        <b>Task Description: </b>{{card.description}}</br>
+      </li>
+      <br>
+        {% endif %}
+      {% endfor %}
+    </ul>
+      </ul>
+    </div>
         <form action ='/add' method='POST'>
           <fieldset>
             <legend>Add Task</legend>
@@ -31,7 +58,7 @@
             </br>
             </br>
             <legend>Add Description</legend>
-            <input type="text" name='description' required>
+            <textarea rows="5" cols="25" name='description' required></textarea>
             </br>
             </br>
             <legend>Add Task Status</legend>
