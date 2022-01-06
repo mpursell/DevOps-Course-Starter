@@ -171,7 +171,7 @@ def get_list_by_name(listName: str) -> str:
             return trelloList['id']
 
 
-def get_item(id):
+def get_item(id) -> object:
     """
     Fetches the saved item with the specified ID.
 
@@ -181,8 +181,21 @@ def get_item(id):
     Returns:
         item: The saved item, or None if no items match the specified ID.
     """
-    items = get_items()
-    return next((item for item in items if item['id'] == str(id)), None)
+  
+    apiCall = Api_request()
+    apiCall.url = 'https://api.trello.com/1/cards/{}'.format(id)
+
+    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
+    returnedDict = response.json()
+
+    card = Card()
+    card.id = returnedDict["id"]
+    card.description = returnedDict["desc"]
+    card.name = returnedDict["name"]
+    card.listName = get_list(card.id)
+
+    return card
+
 
 
 def add_item(title: str, description: str, idList: str) -> dict:

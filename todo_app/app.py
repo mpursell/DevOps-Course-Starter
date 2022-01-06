@@ -3,14 +3,20 @@ from flask import render_template
 from flask import request
 
 from todo_app.flask_config import Config
-from todo_app.data.trello_items import get_items, get_list_by_name
+from todo_app.data.trello_items import get_item, get_items, get_list_by_name
 from todo_app.data.trello_items import add_item
 from todo_app.data.trello_items import complete_item
 from werkzeug.utils import redirect
 
+import logging
+import os                    
 
 app = Flask(__name__)
 app.config.from_object(Config())
+logFile = os.environ.get('LOGFILE')
+
+if logFile:
+    logging.basicConfig(filename=logFile, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
 
 
 @app.route('/')
@@ -38,11 +44,9 @@ def add_Task():
 def get_Task():
 
     taskId = request.args.get('taskId')
-    taskName = request.args.get('taskName')
-    taskDescription = request.args.get('taskDescription')
-    taskListName =  request.args.get('taskListName')
+    task = get_item(taskId)
 
-    return render_template('task.html', taskId=taskId, taskName=taskName, taskListName=taskListName, taskDescription=taskDescription)
+    return render_template('task.html', task=task)
 
 
 @app.route('/update/', methods=['GET','PUT'])
