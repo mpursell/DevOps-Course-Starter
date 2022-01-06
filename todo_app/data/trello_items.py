@@ -211,13 +211,15 @@ def add_item(title: str, description: str, idList: str) -> dict:
         item: The saved item.
     """
 
-    title = title.replace(" ", "%20")
-    description = description.replace(" ", "%20")
+    body = {
+        'title': title,
+        'description': description
+    }
 
     apiCall = Api_request()
     apiCall.url = 'https://api.trello.com/1/cards/?idList={}&name={}&desc={}'.format(idList, title, description)
 
-    response = requests.post(apiCall.url, params=apiCall.requestAuthPayload)
+    response = requests.post(apiCall.url, params=apiCall.requestAuthPayload, data=body)
     item = response.json()
 
     return item
