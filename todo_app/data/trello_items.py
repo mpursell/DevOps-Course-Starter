@@ -102,7 +102,13 @@ class Api_handler:
         url = self._url
 
         return requests.get(self.url, params=self.requestAuthPayload)
-
+class ViewModel:
+    def __init__(self, items):
+        self._items = items
+    
+    @property
+    def items(self):
+        return self._items
 
 
 
@@ -137,7 +143,6 @@ def get_items() -> list:
     # return list of objects with required attributes
     return cardList
 
-
 def get_list(cardID: str) -> str:
     """
     Gets the parent list for a given Trello card ID
@@ -157,7 +162,6 @@ def get_list(cardID: str) -> str:
 
     return list.name
 
-
 def get_list_by_name(listName: str) -> str:
 
     apiCall = Api_handler()
@@ -170,8 +174,7 @@ def get_list_by_name(listName: str) -> str:
         if trelloList['name'] == listName:
             return trelloList['id']
 
-
-def get_item(id) -> object:
+def get_item(id: str) -> object:
     """
     Fetches the saved item with the specified ID.
 
@@ -195,8 +198,6 @@ def get_item(id) -> object:
     card.listName = get_list(card.id)
 
     return card
-
-
 
 def add_item(title: str, description: str, idList: str) -> dict:
     """
@@ -223,7 +224,6 @@ def add_item(title: str, description: str, idList: str) -> dict:
     item = response.json()
 
     return item
-
 
 def complete_item(id:str, idList:str) -> dict:
 

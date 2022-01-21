@@ -3,9 +3,7 @@ from flask import render_template
 from flask import request
 
 from todo_app.flask_config import Config
-from todo_app.data.trello_items import get_item, get_items, get_list_by_name
-from todo_app.data.trello_items import add_item
-from todo_app.data.trello_items import complete_item
+from todo_app.data.trello_items import *
 from werkzeug.utils import redirect
 
 import logging
@@ -17,14 +15,6 @@ logFile = os.environ.get('LOGFILE')
 
 if logFile:
     logging.basicConfig(filename=logFile, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
-
-class ViewModel:
-    def __init__(self, items):
-        self._items = items
-    
-    @property
-    def items(self):
-        return self._items
 
 @app.route('/')
 def index():
