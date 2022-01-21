@@ -38,8 +38,20 @@ You'll need to sign up for a a Trello account https://trello.com/.  Once you hav
 
 The app will require the Python module "requests" to function.  Add this to the poetry virtual enviroment by running "poetry add requests"
 
-### Pytest
+
+## Pytest
 Pytest is required to run the test suite - https://pypi.org/project/pytest/
+Unittests should be launched from the root of the project and within the poetry virtual environment:
+
+```bash
+$ poetry run pytest
+```
+
+For verbose output:
+
+```bash
+$ poetry run pytest -v
+```
 
 ## Running the App
 
