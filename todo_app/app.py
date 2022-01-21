@@ -9,69 +9,73 @@ from werkzeug.utils import redirect
 import logging
 import os                    
 
-app = Flask(__name__)
-app.config.from_object(Config())
-logFile = os.environ.get('LOGFILE')
+def create_app():
 
-if logFile:
-    logging.basicConfig(filename=logFile, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
+    app = Flask(__name__)
+    app.config.from_object(Config())
+    logFile = os.environ.get('LOGFILE')
 
-@app.route('/')
-def index():
+    if logFile:
+        logging.basicConfig(filename=logFile, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
 
-    cardList = get_items()
-    card_view_model = ViewModel(cardList)
-     
-    return render_template('index.html', view_model=card_view_model)    
+    @app.route('/')
+    def index():
+
+        cardList = get_items()
+        card_view_model = ViewModel(cardList)
+        
+        return render_template('index.html', view_model=card_view_model)    
+        
+
+    @app.route('/add', methods = ['POST'])
+    def add_Task():
+        
+        title = request.form.get('title')
+        description = request.form.get('description')
+        list = request.form.get('listName')
+        listId = get_list_by_name(list)
+        
+        add_item(title, description, listId) 
+        
+        return redirect('/')
+
+
+    @app.route('/task/', methods =['GET'])
+    def get_Task():
+
+        taskId = request.args.get('taskId')
+        task = get_item(taskId)
+        
+
+        return render_template('task.html', task=task)
+
+
+    @app.route('/update/', methods=['GET','PUT'])
+    def complete_Task():
+        
+        updateTaskListName = request.args.get('taskStatus')
+        listId = get_list_by_name(updateTaskListName)
+
+        taskId = request.args.get('taskId')
     
+        complete_item(taskId, listId)
 
-@app.route('/add', methods = ['POST'])
-def add_Task():
+        return redirect('/')
+
+
+    @app.route('/update/', methods=['GET','PUT'])
+    def update_Task():
+        """
+        Not required for module 2 task, just added for practice
+        """
+        
+        updateTaskListName = request.args.get('taskStatus')
+        listId = get_list_by_name(updateTaskListName)
+
+        taskId = request.args.get('taskId')
     
-    title = request.form.get('title')
-    description = request.form.get('description')
-    list = request.form.get('listName')
-    listId = get_list_by_name(list)
-    
-    add_item(title, description, listId) 
-    
-    return redirect('/')
+        complete_item(taskId, listId)
 
+        return redirect('/')
 
-@app.route('/task/', methods =['GET'])
-def get_Task():
-
-    taskId = request.args.get('taskId')
-    task = get_item(taskId)
-    
-
-    return render_template('task.html', task=task)
-
-
-@app.route('/update/', methods=['GET','PUT'])
-def complete_Task():
-    
-    updateTaskListName = request.args.get('taskStatus')
-    listId = get_list_by_name(updateTaskListName)
-
-    taskId = request.args.get('taskId')
-   
-    complete_item(taskId, listId)
-
-    return redirect('/')
-
-
-@app.route('/update/', methods=['GET','PUT'])
-def update_Task():
-    """
-    Not required for module 2 task, just added for practice
-    """
-    
-    updateTaskListName = request.args.get('taskStatus')
-    listId = get_list_by_name(updateTaskListName)
-
-    taskId = request.args.get('taskId')
-   
-    complete_item(taskId, listId)
-
-    return redirect('/')
+    return app
