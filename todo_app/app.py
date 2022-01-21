@@ -18,13 +18,21 @@ logFile = os.environ.get('LOGFILE')
 if logFile:
     logging.basicConfig(filename=logFile, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
 
+class ViewModel:
+    def __init__(self, items):
+        self._items = items
+    
+    @property
+    def items(self):
+        return self._items
 
 @app.route('/')
 def index():
 
     cardList = get_items()
+    card_view_model = ViewModel(cardList)
      
-    return render_template('index.html', cardList=cardList)    
+    return render_template('index.html', view_model=card_view_model)    
     
 
 @app.route('/add', methods = ['POST'])
@@ -45,6 +53,7 @@ def get_Task():
 
     taskId = request.args.get('taskId')
     task = get_item(taskId)
+    
 
     return render_template('task.html', task=task)
 

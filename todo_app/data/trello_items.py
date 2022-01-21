@@ -84,7 +84,7 @@ class List:
     def name(self, value: str):
         self._name = value
         return self._name
-class Api_request:
+class Api_handler:
 
     def __init__(self):
         self.requestAuthPayload = {'key': apiKey, 'token': apiToken}
@@ -114,7 +114,7 @@ def get_items() -> list:
         list: JSON from the API parsed to a list of dictionaries.
     """
 
-    apiCall = Api_request()
+    apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/boards/{}/cards?'.format(boardID)
     
     response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
@@ -146,7 +146,7 @@ def get_list(cardID: str) -> str:
     Args: 
         cardID: The ID of the card / task
     """
-    apiCall = Api_request()
+    apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/cards/{}/list'.format(cardID)
 
     response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
@@ -160,7 +160,7 @@ def get_list(cardID: str) -> str:
 
 def get_list_by_name(listName: str) -> str:
 
-    apiCall = Api_request()
+    apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/boards/{}/lists'.format(boardID)
 
     response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
@@ -182,7 +182,7 @@ def get_item(id) -> object:
         item: The saved item, or None if no items match the specified ID.
     """
   
-    apiCall = Api_request()
+    apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/cards/{}'.format(id)
 
     response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
@@ -216,7 +216,7 @@ def add_item(title: str, description: str, idList: str) -> dict:
         'description': description
     }
 
-    apiCall = Api_request()
+    apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/cards/?idList={}&name={}&desc={}'.format(idList, title, description)
 
     response = requests.post(apiCall.url, params=apiCall.requestAuthPayload, data=body)
@@ -234,6 +234,6 @@ def complete_item(id:str, idList:str) -> dict:
           idList : the id of the list to move the item to
     """
 
-    apiCall = Api_request()
+    apiCall = Api_handler()
     apiCall.url = f'https://api.trello.com/1/cards/{id}?idList={idList}'
     response = requests.put(apiCall.url, params=apiCall.requestAuthPayload)

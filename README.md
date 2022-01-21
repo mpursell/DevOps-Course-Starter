@@ -18,6 +18,7 @@ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-
 
 ## Dependencies
 
+### Poetry
 The project uses a virtual environment to isolate package dependencies. To create the virtual environment and install required packages, run the following from your preferred shell:
 
 ```bash
@@ -32,9 +33,13 @@ $ cp .env.template .env  # (first time only)
 
 The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like development mode (which also enables features like hot reloading when you make a file change). There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
 
+### Trello
 You'll need to sign up for a a Trello account https://trello.com/.  Once you have an account, you'll need to get your API key and token at https://trello.com/app-key.  These should be added to your .env file as API_KEY and API_TOKEN.  You'll also need to setup a board on Trello, and add that board ID to your .env as TRELLO_BOARD_ID. 
 
 The app will require the Python module "requests" to function.  Add this to the poetry virtual enviroment by running "poetry add requests"
+
+### Pytest
+Pytest is required to run the test suite - https://pypi.org/project/pytest/
 
 ## Running the App
 
