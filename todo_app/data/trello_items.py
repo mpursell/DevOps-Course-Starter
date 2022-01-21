@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 import requests
 import os
 
@@ -88,6 +89,7 @@ class Api_handler:
 
     def __init__(self):
         self.requestAuthPayload = {'key': apiKey, 'token': apiToken}
+      
 
         @property
         def url(self):
@@ -98,10 +100,21 @@ class Api_handler:
             self._url = value
             return self._url
 
-    def make_call(self, url):
-        url = self._url
+        @property
+        def body(self):
+            return self._body
 
+        @body.setter
+        def body(self, value):
+            self._body = value
+            return self._body
+
+    def make_get_call(self):
         return requests.get(self.url, params=self.requestAuthPayload)
+
+    def make_post_call_with_body_data(self):
+        return requests.post(self.url, params=self.requestAuthPayload, data=self.body)
+
 class ViewModel:
     def __init__(self, items):
         self._items = items
@@ -122,9 +135,8 @@ def get_items() -> list:
 
     apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/boards/{}/cards?'.format(boardID)
+    response = apiCall.make_get_call()
     
-    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
-
     returnedList = response.json()
 
     cardList =[]
@@ -154,7 +166,7 @@ def get_list(cardID: str) -> str:
     apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/cards/{}/list'.format(cardID)
 
-    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
+    response = apiCall.make_get_call()
     returnedDict = response.json()
 
     list = List()
@@ -167,7 +179,7 @@ def get_list_by_name(listName: str) -> str:
     apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/boards/{}/lists'.format(boardID)
 
-    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
+    response = apiCall.make_get_call()
     returnedList = response.json()
 
     for trelloList in returnedList:
@@ -188,7 +200,8 @@ def get_item(id: str) -> object:
     apiCall = Api_handler()
     apiCall.url = 'https://api.trello.com/1/cards/{}'.format(id)
 
-    response = requests.get(apiCall.url, params=apiCall.requestAuthPayload)
+    
+    response = apiCall.make_get_call()
     returnedDict = response.json()
 
     card = Card()
@@ -212,15 +225,17 @@ def add_item(title: str, description: str, idList: str) -> dict:
         item: The saved item.
     """
 
-    body = {
+ 
+
+    apiCall = Api_handler()
+    apiCall.url = 'https://api.trello.com/1/cards/?idList={}&name={}&desc={}'.format(idList, title, description)
+    
+    apiCall.body = {
         'title': title,
         'description': description
     }
 
-    apiCall = Api_handler()
-    apiCall.url = 'https://api.trello.com/1/cards/?idList={}&name={}&desc={}'.format(idList, title, description)
-
-    response = requests.post(apiCall.url, params=apiCall.requestAuthPayload, data=body)
+    response = apiCall.make_post_call_with_body_data()
     item = response.json()
 
     return item

@@ -23,6 +23,9 @@ class StubResponseList():
     def get_list(self):
         return {'name':'foobar'}
 
+class StubViewModel():
+    def items(self):
+        return [{'listName':'Doing'}]
 
 
 
@@ -36,7 +39,8 @@ def stub_add_item(url, params, data):
 def stub_list(url, params):
     return StubResponseList()
 
-
+def stub_view_model():
+    return [{'listName':'Doing'}]
 
 
 def test_get_items(monkeypatch):
@@ -108,9 +112,13 @@ def test_get_list_by_name(monkeypatch):
 
     #Assert
     assert listByName == '123'
-    assert isinstance(listByName, str) 
+    assert isinstance(listByName, str)    
+
+def test_ViewModel():
+    """check to instantiate ViewModel and that items property is there"""
+    #Act
+    view = ViewModel(stub_view_model)
+
+    #Assert
+    assert view.items 
     
-   
-
-     
-
