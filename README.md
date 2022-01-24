@@ -53,6 +53,13 @@ For verbose output:
 $ poetry run pytest -v
 ```
 
+If there is an issue running pytest, you may find that your path hasn't been added to the PYTHONPATH variable, in which case you can run:
+
+```bash
+$ python3 -m pytest -v
+```
+to include your path in PYTHONPATH for the duration of the test run. 
+
 ## Running the App
 
 Once the all dependencies have been installed, start the Flask app in development mode within the Poetry environment by running:
