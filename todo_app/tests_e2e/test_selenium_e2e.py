@@ -31,6 +31,7 @@ def delete_trello_board(api_key, api_token, board_id):
     requestAuthPayload = {'key': {api_key}, 'token':  {api_token}}
     response = requests.delete(url, params=requestAuthPayload)
 
+
 @pytest.fixture(scope='module')
 def app_with_temp_board():
 
@@ -39,13 +40,9 @@ def app_with_temp_board():
     
     api_key = os.environ.get('API_KEY')
     api_token = os.environ.get('API_TOKEN')
-
-    # create the new board and update the board id
-    # environment variable
     board_id = create_trello_board(api_key, api_token)
     os.environ['TRELLO_BOARD_ID'] = board_id
-    
-
+ 
     # construct the new app
     application = app.create_app()
 
@@ -68,3 +65,4 @@ def test_task_journey(driver, app_with_temp_board):
     driver.get('http://localhost:5000/')
 
     assert driver.title == 'To-Do App'
+

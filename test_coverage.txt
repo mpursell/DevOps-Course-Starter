@@ -1,0 +1,7 @@
+----------- coverage: platform linux, python 3.9.5-final-0 -----------
+Name                                  Stmts   Miss  Cover
+---------------------------------------------------------
+todo_app/tests/test_app.py               55      2    96%
+todo_app/tests/test_trello_items.py      57      3    95%
+---------------------------------------------------------
+TOTAL                                   112      5    96%
