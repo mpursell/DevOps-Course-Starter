@@ -16,7 +16,8 @@ def create_app():
     logFile = os.environ.get('LOGFILE')
 
     if logFile:
-        logging.basicConfig(filename=logFile, level=logging.DEBUG, format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
+        logging.basicConfig(filename=logFile, level=logging.DEBUG,
+                            format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
 
     @app.route('/')
     def index():
@@ -25,7 +26,6 @@ def create_app():
         card_view_model = ViewModel(cardList)
         
         return render_template('index.html', view_model=card_view_model)    
-        
 
     @app.route('/add', methods = ['POST'])
     def add_Task():
@@ -39,7 +39,6 @@ def create_app():
         
         return redirect('/')
 
-
     @app.route('/task/', methods =['GET'])
     def get_Task():
 
@@ -48,7 +47,6 @@ def create_app():
         
 
         return render_template('task.html', task=task)
-
 
     @app.route('/update/', methods=['GET','PUT'])
     def complete_Task():
@@ -61,7 +59,6 @@ def create_app():
         complete_item(taskId, listId)
 
         return redirect('/')
-
 
     @app.route('/update/', methods=['GET','PUT'])
     def update_Task():

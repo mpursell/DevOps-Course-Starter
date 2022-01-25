@@ -155,6 +155,7 @@ def get_items() -> list[object]:
     # return list of objects with required attributes
     return cardList
 
+
 def get_list(cardID: str) -> str:
     """
     Gets the parent list for a given Trello card ID
@@ -174,6 +175,7 @@ def get_list(cardID: str) -> str:
 
     return list.name
 
+
 def get_list_by_name(listName: str) -> str:
 
     apiCall = Api_handler()
@@ -185,6 +187,7 @@ def get_list_by_name(listName: str) -> str:
     for trelloList in returnedList:
         if trelloList['name'] == listName:
             return trelloList['id']
+
 
 def get_item(id: str) -> object:
     """
@@ -211,6 +214,7 @@ def get_item(id: str) -> object:
     card.listName = get_list(card.id)
 
     return card
+
 
 def add_item(title: str, description: str, idList: str) -> dict:
     """
@@ -240,7 +244,8 @@ def add_item(title: str, description: str, idList: str) -> dict:
 
     return item
 
-def complete_item(id:str, idList:str) -> dict:
+
+def complete_item(id:str, idList:str) -> None:
 
     """
     Allows a task to be moved to a given Trello list

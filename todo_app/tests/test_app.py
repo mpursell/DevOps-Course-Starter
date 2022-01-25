@@ -1,3 +1,4 @@
+from flask import request
 import pytest
 import os
 import requests
@@ -17,14 +18,42 @@ class StubResponse():
         self.listName = listName
         self.taskUrl = taskUrl
 
-def mock_get_items() -> list[object]:
-    
-    return [StubResponse('name','1','123','5678','desc','9999', '/tasks/?taskId=1')]
 
 class MockViewModel():
 
     def __init__(self, cardList):
         self.cardList = cardList
+
+
+def mock_get_items() -> list[object]:
+    
+    return [StubResponse('name','1','123','5678','desc','9999', '/tasks/?taskId=1')]
+
+
+def mock_add_item(title, description, listId) -> dict:
+
+    mockItem = {
+        'title':'title',
+        'description': 'description',
+        'listId': 'listID'
+    }
+
+    return mockItem
+
+
+def mock_get_list_by_name(listName: str) -> str:
+    
+    return 'listName'
+
+
+def mock_get_item(taskId):
+
+    return StubResponse('name','1','123','5678','desc','9999', '/tasks/?taskId=1')
+
+
+def mock_complete_item(taskid, listid):
+    pass
+
 
 @pytest.fixture
 def client():
@@ -46,17 +75,52 @@ def test_index_page(monkeypatch, client):
 
     # arrange
     
-    # I think this should be patching the get_items() function and the ViewModel object
-    # but I'm still getting a JSON error when running the test, 
-    # the test looks like it's still trying to use variables from the get_items() function
-    # in trello_items.py
-    cardList = mock_get_items()
-    monkeypatch.setattr('todo_app.data.trello_items.get_items', mock_get_items())
-    monkeypatch.setattr('todo_app.data.trello_items.ViewModel', MockViewModel(cardList))
+    # Note - can't use directly imported modules like:
+    # todo_app.data.trello_items.get_items
+    
+    monkeypatch.setattr('todo_app.app.get_items', mock_get_items)
+    
     
     # act
     response = client.get('/')
+    assert response.status == '200 OK'
     
     
     
+def test_add_task(monkeypatch, client):
+
+    # arrange
+    
+    monkeypatch.setattr('todo_app.app.get_list_by_name', mock_get_list_by_name)
+    monkeypatch.setattr('todo_app.app.add_item', mock_add_item)
+
+    # act
+    response = client.post('/add')
+    # check for a 302 since our app redirects us to / after the POST 
+    assert response.status == '302 FOUND'
+
+
+def test_get_task(monkeypatch, client):
+
+    # arrange
+    
+    monkeypatch.setattr('todo_app.app.get_item', mock_get_item)
+
+    # act
+    response = client.get('/task/')
+    assert response.status == '200 OK'
+
+
+def test_complete_task(monkeypatch, client):
+
+    # arrange
+    monkeypatch.setattr('todo_app.app.get_list_by_name', mock_get_list_by_name)
+    monkeypatch.setattr('todo_app.app.complete_item', mock_complete_item)
+
+        # have to mock get_items for the return to the index page.
+    monkeypatch.setattr('todo_app.app.get_items', mock_get_items)
+
+    # act
+    response = client.get('/')
+    assert response.status == '200 OK'
     
