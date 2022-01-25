@@ -125,7 +125,7 @@ class ViewModel:
 
 
 
-def get_items() -> list:
+def get_items() -> list[object]:
     """
     Fetches all cards on the given Trello board ID.
 
