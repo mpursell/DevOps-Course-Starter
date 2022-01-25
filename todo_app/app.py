@@ -13,7 +13,8 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
-    logFile = os.environ.get('LOGFILE')
+    #logFile = os.environ.get('LOGFILE')
+    logFile = ''
 
     if logFile:
         logging.basicConfig(filename=logFile, level=logging.DEBUG,
