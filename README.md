@@ -42,7 +42,7 @@ The app will require the Python module "requests" to function.  Add this to the 
 ## Pytest
 Pytest is required to run the test suite - https://pypi.org/project/pytest/
 
-# Unit Testing
+#### Unit Testing
 Unittests should be launched from the root of the project and within the poetry virtual environment:
 
 ```bash
@@ -63,7 +63,7 @@ $ python3 -m pytest -v
 to include your path in PYTHONPATH for the duration of the test run. 
 
 
-#Integration Testing
+### Integration Testing
 
 The Selenium testing framework and the web driver for your browser is required to complete the integraiton tests.  The browser drivers can be found [here](https://www.selenium.dev/documentation/webdriver/getting_started/install_drivers/).
 
