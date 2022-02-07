@@ -17,7 +17,7 @@ def create_app():
     logFile = ''
 
     if logFile:
-        logging.basicConfig(filename=logFile, level=logging.DEBUG,
+        logging.basicConfig(filename=logFile, level=logging.INFO,
                             format='%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s')
 
     @app.route('/')
