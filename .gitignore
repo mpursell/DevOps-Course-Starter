@@ -126,4 +126,5 @@ env/
 geckodriver.log
 
 ## web driver ##
+geckodriver
 

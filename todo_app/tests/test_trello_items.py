@@ -71,6 +71,8 @@ def test_get_item(monkeypatch):
 
     #Assert
     assert isinstance(item, object)
+    assert isinstance(item, Card)
+    assert item.name == "foobar"
 
 def test_get_list(monkeypatch):
 

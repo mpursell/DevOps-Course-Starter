@@ -17,13 +17,7 @@ class StubResponse():
         self.description = description,
         self.listName = listName
         self.taskUrl = taskUrl
-
-
-class MockViewModel():
-
-    def __init__(self, cardList):
-        self.cardList = cardList
-
+        
 
 def mock_get_items() -> list[object]:
     

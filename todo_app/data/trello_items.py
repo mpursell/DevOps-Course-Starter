@@ -88,7 +88,8 @@ class List:
 class Api_handler:
 
     def __init__(self):
-        self.requestAuthPayload = {'key': apiKey, 'token': apiToken}
+        #self.requestAuthPayload = {'key': apiKey, 'token': apiToken}
+        self.requestAuthPayload = {'key': os.environ.get('API_KEY'), 'token': os.environ.get('API_TOKEN')}
       
 
         @property

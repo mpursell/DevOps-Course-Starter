@@ -14,9 +14,9 @@
       <br>
       <p>Status: {{task.listName}}</p>
       <br>
-      <a href = "{{url_for('update_Task', taskId=task.Id, taskStatus='Doing')}}">Set task status to "Doing"</a>
+      <a href = "{{url_for('update_Task', taskId=taskId, taskStatus='Doing')}}">Set task status to "Doing"</a>
       <br>
-      <a href = "{{url_for('complete_Task', taskId=task.Id, taskStatus='Done')}}">Complete Task</a>
+      <a href = "{{url_for('complete_Task', taskId=taskId, taskStatus='Done')}}">Complete Task</a>
     </div>
   </div>
 {% endblock %}
