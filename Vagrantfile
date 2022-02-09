@@ -83,6 +83,9 @@ Vagrant.configure("2") do |config|
      echo 'Setting poetry.toml - in-project to false...'
      sed -i 's/in-project = true/in-project = false/' /vagrant/poetry.toml
 
+     echo 'Installing Gunicorn...'
+     pip install gunicorn
+
    SHELL
 
   config.trigger.after :up do |trigger|
