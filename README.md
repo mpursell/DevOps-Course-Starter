@@ -93,3 +93,29 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+
+## Vagrant
+
+The repo has a Vagrantfile configured to allow the app to run in a vagrant virtual machine. Vagrant will map port 5000 on the host to port 5000 on the box. 
+
+### Installing Vagrant
+
+Vagrant will require a hypervisor.  This app has been tested with [VirtualBox](https://www.virtualbox.org/).  Once the hypervisor is installed, you will need to download and install vagrant from the [official website](https://www.vagrantup.com/). 
+
+You can check the Vagrantfile by running:
+
+```bash
+$ vagrant validate
+```
+
+If validation is successful, you can run:
+
+```bash
+$ vagrant up
+```
+to provision the vagrant box. 
+
+## Gunicorn
+
+The vagrant box is configured to use gunicorn to serve the app.  Vagrant will provision gunicorn, map the host port 5000 to the box port 5000.  Gunicorn will run in daemon mode. 

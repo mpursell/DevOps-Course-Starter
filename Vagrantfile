@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
   # via 127.0.0.1 to disable public access
-  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -83,9 +83,6 @@ Vagrant.configure("2") do |config|
      echo 'Setting poetry.toml - in-project to false...'
      sed -i 's/in-project = true/in-project = false/' /vagrant/poetry.toml
 
-     echo 'Installing Gunicorn...'
-     pip install gunicorn
-
    SHELL
 
   config.trigger.after :up do |trigger|
@@ -96,7 +93,10 @@ Vagrant.configure("2") do |config|
       
       cd /vagrant                    
       poetry install
-      nohup poetry run flask run --host 0.0.0.0 > logs.log 2>&1 &
+      poetry add gunicorn
+
+      cd /vagrant/todo_app
+      poetry run gunicorn --bind 0.0.0.0:5000 -w 4 'app:create_app()' --daemon
 
     "}
   end
