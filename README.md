@@ -1,3 +1,5 @@
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # DevOps Apprenticeship: Project Exercise
 
 ## System Requirements
@@ -58,7 +60,7 @@ $ poetry run pytest -v
 If there is an issue running pytest, you may find that your path hasn't been added to the PYTHONPATH variable, in which case you can run:
 
 ```bash
-$ python3 -m pytest -v
+$ poetry run python3 -m pytest -v
 ```
 to include your path in PYTHONPATH for the duration of the test run. 
 

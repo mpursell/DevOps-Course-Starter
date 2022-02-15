@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
-  config.vm.network "forwarded_port", guest: 5000, host: 5000
+  #config.vm.network "forwarded_port", guest: 5000, host: 5000
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -93,7 +93,6 @@ Vagrant.configure("2") do |config|
       
       cd /vagrant                    
       poetry install
-      poetry add gunicorn
 
       cd /vagrant/todo_app
       poetry run gunicorn --bind 0.0.0.0:5000 -w 4 'app:create_app()' --daemon
