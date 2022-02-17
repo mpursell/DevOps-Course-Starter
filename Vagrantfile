@@ -88,7 +88,7 @@ Vagrant.configure("2") do |config|
   config.trigger.after :up do |trigger|
 
     trigger.name = "Launching App"
-    trigger.info = "Running TDO setup script..."
+    trigger.info = "Running To Do setup script..."
     trigger.run_remote = {privileged: false, inline: "
       
       cd /vagrant                    
