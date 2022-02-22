@@ -1,3 +1,5 @@
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # DevOps Apprenticeship: Project Exercise
 
 ## System Requirements
@@ -58,7 +60,7 @@ $ poetry run pytest -v
 If there is an issue running pytest, you may find that your path hasn't been added to the PYTHONPATH variable, in which case you can run:
 
 ```bash
-$ python3 -m pytest -v
+$ poetry run python3 -m pytest -v
 ```
 to include your path in PYTHONPATH for the duration of the test run. 
 
@@ -93,3 +95,29 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+
+## Vagrant
+
+The repo has a Vagrantfile configured to allow the app to run in a vagrant virtual machine. Vagrant will map port 5000 on the host to port 5000 on the box. 
+
+### Installing Vagrant
+
+Vagrant will require a hypervisor.  This app has been tested with [VirtualBox](https://www.virtualbox.org/).  Once the hypervisor is installed, you will need to download and install vagrant from the [official website](https://www.vagrantup.com/). 
+
+You can check the Vagrantfile by running:
+
+```bash
+$ vagrant validate
+```
+
+If validation is successful, you can run:
+
+```bash
+$ vagrant up
+```
+to provision the vagrant box. 
+
+## Gunicorn
+
+The vagrant box is configured to use gunicorn to serve the app.  Vagrant will provision gunicorn, map the host port 5000 to the box port 5000.  Gunicorn will run in daemon mode. 

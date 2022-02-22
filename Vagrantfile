@@ -12,12 +12,12 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
-  config.vm.network "forwarded_port", guest: 5000, host: 5000
+  #config.vm.network "forwarded_port", guest: 5000, host: 5000
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
   # via 127.0.0.1 to disable public access
-  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "127.0.0.1"
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -88,12 +88,14 @@ Vagrant.configure("2") do |config|
   config.trigger.after :up do |trigger|
 
     trigger.name = "Launching App"
-    trigger.info = "Running TDO setup script..."
+    trigger.info = "Running To Do setup script..."
     trigger.run_remote = {privileged: false, inline: "
       
       cd /vagrant                    
       poetry install
-      nohup poetry run flask run --host 0.0.0.0 > logs.log 2>&1 &
+
+      cd /vagrant/todo_app
+      poetry run gunicorn --bind 0.0.0.0:5000 -w 4 'app:create_app()' --daemon
 
     "}
   end
