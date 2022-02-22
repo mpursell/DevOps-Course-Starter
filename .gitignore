@@ -120,6 +120,7 @@ env/
 .env
 .vscode/settings.json
 .vscode
+.vagrant
 
 ## logs ##
 .log
@@ -127,4 +128,6 @@ geckodriver.log
 
 ## web driver ##
 geckodriver
+
+
 
