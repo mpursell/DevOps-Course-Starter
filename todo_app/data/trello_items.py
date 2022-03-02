@@ -1,4 +1,5 @@
 from multiprocessing.sharedctypes import Value
+from __future__ import annotations
 import requests
 import os
 
