@@ -1,0 +1,6 @@
+services:
+  web:
+    ports:
+      - "5000:5000"
+    image: todo-testing
+    container_name: devops_todo
