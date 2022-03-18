@@ -28,3 +28,18 @@ services:
       - type: bind
         source: ./
         target: /usr/src/todo_app
+
+
+  testing:
+    build: 
+      context: "."
+      target: testing
+    image: todo-app:testing
+    container_name: todo_app_testing
+    env_file:
+      - .env
+    # want to mount the current directory so we can make code changes
+    volumes:
+      - type: bind
+        source: ./
+        target: /usr/src/todo_app

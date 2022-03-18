@@ -27,6 +27,11 @@ EXPOSE 5001
 # want to run flask via a shell script for dev work
 CMD ["./docker-entrypoint-dev.sh"]
 
+FROM development as testing
+EXPOSE 5002
+CMD ["./docker-entrypoint-testing.sh"]
+
+
 
 
 
