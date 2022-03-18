@@ -174,34 +174,38 @@ Both production and developement containers can be created with Docker.  As befo
 
 ### Building Development Containers
 
-Both production and development builds run from one multi-stage build documented in the Dockerfile.  In order to build dev containers do the following:
+Both production and development builds run from one multi-stage build documented in the Dockerfile.  In order to build development containers do the following:
 
 ```
-$ docker build --target development -t todo-app:dev .
+$ docker-compose up development
 ```
 
-This builds the "**development**" stage from the Dockerfile, and names and tags the image as "**todo-app:dev**" (this is crucial as docker-compose will be looking for that image name to run the image as a container).  This also assumes that you are in the root folder, and this folder is the build context that should be passed to docker ("**.**").
+This builds the "**development**" stage from the *Dockerfile*, and *docker-compose.yml* tags the image as "**todo-app:dev**"  The *docker-compose.yml* also assumes that the root folder is the build context that should be passed to docker ("**.**").
 
-Once the image has built, you can simply run:
-
-```
-$ docker-compose --profile dev up
-```
-
-to build the development container and run it.  This targets the "**dev**" profile in the *docker-compose.yml* and will pull in the .env file from the project folder, and map the local:container ports to **5000:5000** by default. 
+The local:container ports will be mapped to **5000:5000** by default. 
 
 ### Building Production Containers
 
-Very similar process to building a development container, but you need to target the "**production**" build stage in the Dockerfile to build the image, and target the "**prod**" profile for docker-compose.  Example below:
+Very similar process to building a development container, but you need to target the "**production**" build stage in the Dockerfile to build the image with docker-compose:
 
 ```
-$ docker build --target production -t todo-app:dev .
-
-$ docker-compose --profile prod up
+$ docker-compose up production
 ```
+The local:container ports will be mapped to **5001:5000** by default. 
 
 ### Differences Between Production and Development Containers
 
-* Web servers - production runs **gunicorn** and dev runs **flask**.  
+* Web servers - Production runs **gunicorn** and dev runs **flask**.  
 * Entrypoints - Production runs ./docker-entrypoint.sh in order to run gunicorn.  Development runs ./docker-entrypoint-dev.sh to run flask.  
 * Volume mounts - Production has no volumes mounted, development will try to mount a local folder to the container to allow for code updates. 
+* Local ports - Both prod and dev web servers run on port 5000 in the container.  Production is mapped 5000:5000 while development is mapped 5001:5000 so both containers can be run on the host simultaenously.
+
+### Building and Running Both Enviroments
+
+To build and run images / containers for both prod and dev:
+
+```
+$ docker-compose up -d
+
+```
+The docker-compose command above will bring up containers for prod and dev and run them in detached mode.
