@@ -168,3 +168,40 @@ And then amend your `ansible-playbook` command to add the extra host address:
 `ansible-playbook playbook.yaml -i ansible-inventory.yaml -e @<secrets_file>.yaml -e host1=<managed node IP address> -e host2=<second managed node address> --vault-password-file <vault password file>.yml`
 
 
+## Docker
+
+Both production and developement containers can be created with Docker.  As before you will need a .env file in the root folder, and the docker commands below assume you are running them from that root project folder.  
+
+### Building Development Containers
+
+Both production and development builds run from one multi-stage build documented in the Dockerfile.  In order to build dev containers do the following:
+
+```
+$ docker build --target development -t todo-app:dev .
+```
+
+This builds the "**development**" stage from the Dockerfile, and names and tags the image as "**todo-app:dev**" (this is crucial as docker-compose will be looking for that image name to run the image as a container).  This also assumes that you are in the root folder, and this folder is the build context that should be passed to docker ("**.**").
+
+Once the image has built, you can simply run:
+
+```
+$ docker-compose --profile dev up
+```
+
+to build the development container and run it.  This targets the "**dev**" profile in the *docker-compose.yml* and will pull in the .env file from the project folder, and map the local:container ports to **5000:5000** by default. 
+
+### Building Production Containers
+
+Very similar process to building a development container, but you need to target the "**production**" build stage in the Dockerfile to build the image, and target the "**prod**" profile for docker-compose.  Example below:
+
+```
+$ docker build --target production -t todo-app:dev .
+
+$ docker-compose --profile prod up
+```
+
+### Differences Between Production and Development Containers
+
+* Web servers - production runs **gunicorn** and dev runs **flask**.  
+* Entrypoints - Production runs ./docker-entrypoint.sh in order to run gunicorn.  Development runs ./docker-entrypoint-dev.sh to run flask.  
+* Volume mounts - Production has no volumes mounted, development will try to mount a local folder to the container to allow for code updates. 

@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.9-slim-buster as base
 
 RUN mkdir -p /usr/src/todo_app
 
@@ -18,7 +18,13 @@ ENV PATH="${HOME}/.poetry/bin:$PATH"
 
 EXPOSE 5000
 
+FROM base as production
+# just want to run gunicorn via a shell script here
 CMD ["./docker-entrypoint.sh"]
+
+FROM base as development
+# want to run flask vi a shell script for dev work
+CMD ["./docker-entrypoint-dev.sh"]
 
 
 

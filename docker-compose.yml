@@ -1,8 +1,25 @@
 services:
-  web:
+  production:
     ports:
       - "5000:5000"
-    image: todo-testing
-    container_name: devops_todo_testing
+    image: todo-app:prod
+    container_name: todo_app_prod
     env_file:
       - .env
+    profiles:
+      - prod
+
+  development:
+    ports:
+      - "5000:5000"
+    image: todo-app:dev
+    container_name: todo_app_dev
+    env_file:
+      - .env
+    profiles: 
+      - dev
+    # want to mount the current directory so we can make code changes
+    #volumes:
+     # - type: bind
+      #  source: /home/mike/data
+       # target: /usr/src/todo_app
