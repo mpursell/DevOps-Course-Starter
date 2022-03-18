@@ -3,4 +3,6 @@ services:
     ports:
       - "5000:5000"
     image: todo-testing
-    container_name: devops_todo
+    container_name: devops_todo_testing
+    env_file:
+      - .env

@@ -16,6 +16,8 @@ RUN apt update -y &&\
 
 ENV PATH="${HOME}/.poetry/bin:$PATH"
 
+EXPOSE 5000
+
 CMD ["./docker-entrypoint.sh"]
 
 

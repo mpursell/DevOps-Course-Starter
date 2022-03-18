@@ -1,0 +1,19 @@
+# Environment vars to ignore
+.env.j2
+.env.template
+.env
+.secrets
+
+# Ansible files to ignore
+vars.yaml
+playbook.yaml
+ansible-inventory.yaml
+
+# Vagrant files to ignore
+Vagrantfile
+todoapp.service
+
+# 
+test_coverage.txt
+.gitignore
+README.md
