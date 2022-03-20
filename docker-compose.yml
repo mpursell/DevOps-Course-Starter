@@ -37,7 +37,7 @@ services:
     image: todo-app:testing
     container_name: todo_app_testing
     env_file:
-      - .env
+      - .env.test
     # want to mount the current directory so we can make code changes
     volumes:
       - type: bind

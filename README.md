@@ -200,7 +200,17 @@ The local:container ports will be mapped to **5001:5000** by default.
 * Volume mounts - Production has no volumes mounted, development will try to mount a local folder to the container to allow for code updates. 
 * Local ports - Both prod and dev web servers run on port 5000 in the container.  Production is mapped 5000:5000 while development is mapped 5001:5000 so both containers can be run on the host simultaenously.
 
-### Building and Running Both Enviroments
+### Building Testing Containers
+
+Very similar process to building a development container, but you need to target the "**testing**" build stage in the Dockerfile to build the image with docker-compose:
+
+```
+$ docker-compose up testing
+```
+This container will run automated unit / integration / e2e tests using pytest launched from the entrypoint shell script. 
+
+
+### Building and Running All Containers (Production / Development / Testing)
 
 To build and run images / containers for both prod and dev:
 
@@ -209,3 +219,11 @@ $ docker-compose up -d
 
 ```
 The docker-compose command above will bring up containers for prod and dev and run them in detached mode.
+
+### Persistent Test Running 
+
+The repository includes a *tricks.yaml* in the root file which can be used in conjuncation with **watchdog/watchmedo** to run the docker test container everytime a change is made to a *\.py*, *\.html*, or *\.toml* file.  
+
+Install **watchdog/watchmedo** using the instructions here: https://github.com/gorakhargosh/watchdog/
+
+Once installed you can run **watchmedo tricks tricks.yaml** from the root project folder to monitor the folder.  The monitoring is recursive by default. 

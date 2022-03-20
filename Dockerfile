@@ -15,21 +15,22 @@ COPY . /usr/src/todo_app
 
 RUN $HOME/.poetry/bin/poetry install --no-interaction
 
-ENV PATH="${HOME}/.poetry/bin:$PATH"
+ENV PATH="$HOME/.poetry/bin:$PATH"
 
 FROM base as production
 EXPOSE 5000
-# just want to run gunicorn via a shell script here
+# run gunicorn via a shell script 
 CMD ["./docker-entrypoint.sh"]
 
 FROM base as development
 EXPOSE 5001
-# want to run flask via a shell script for dev work
+# run flask via a shell script for dev work
 CMD ["./docker-entrypoint-dev.sh"]
 
 FROM development as testing
 EXPOSE 5002
 CMD ["./docker-entrypoint-testing.sh"]
+
 
 
 
