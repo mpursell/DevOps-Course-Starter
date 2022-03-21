@@ -222,8 +222,13 @@ The docker-compose command above will bring up containers for prod and dev and r
 
 ### Persistent Test Running 
 
-The repository includes a *tricks.yaml* in the root file which can be used in conjuncation with **watchdog/watchmedo** to run the docker test container everytime a change is made to a *\.py*, *\.html*, or *\.toml* file.  
+The repository includes a *tricks.yaml* in the root file which can be used in conjuncation with **watchdog/watchmedo** to run the docker test container everytime a change is made to a *\.py*, *\.html*, *\.env*, or *\.toml* file.  
 
 Install **watchdog/watchmedo** using the instructions here: https://github.com/gorakhargosh/watchdog/
 
-Once installed you can run **watchmedo tricks tricks.yaml** from the root project folder to monitor the folder.  The monitoring is recursive by default. 
+Once installed you can run
+
+```
+$ watchmedo tricks tricks.yaml
+``` 
+from the root project folder to monitor the folder.  The monitoring is recursive by default. 

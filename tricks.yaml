@@ -5,3 +5,4 @@ tricks:
 - watchdog.tricks.ShellCommandTrick:
     patterns: ["*.py", "*.html", ".env*", "*.toml"]
     shell_command: "sudo docker-compose up testing"
+    ignore_directories: "/logs"
