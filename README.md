@@ -121,3 +121,50 @@ to provision the vagrant box.
 ## Gunicorn
 
 The vagrant box is configured to use gunicorn to serve the app.  Vagrant will provision gunicorn, map the host port 5000 to the box port 5000.  Gunicorn will run in daemon mode. 
+
+## Ansible
+
+An Ansible playbook and inventory are included to configure the web app on an Ansible managed node.  These need to be copied to the Ansible controller node.  In addition to this you will need to create a YAML file that contains your secrets on the controller node:
+
+```
+secret_key: <value>
+trello_board_id: <value>
+logfile: <value>
+api_key: <value>
+api_token:<value>
+```
+Once the secrets file has been created, you'll need to encrypt it with:
+
+`ansible-vault encrypt <filename>`
+
+This will ask you to enter an encryption password.  Do this and then create a new YAML file that contains only that vault password. 
+
+Once you have: 
+
+* The playbook 
+* The inventory 
+* The encrypted secrets file 
+* The password file 
+
+on the controller node, you can run the playbook with this command:
+
+`ansible-playbook playbook.yaml -i ansible-inventory.yaml -e @<secrets_file>.yaml -e host=<managed node IP address> --vault-password-file <vault password file>.yml`
+
+### Adding more hosts to Ansible
+
+You can configure the inventory to run the playbook on more than one host.  In that case you would need to edit the ansible-inventory.yaml to look something like this:
+
+```
+all:
+    children:
+        managedhosts:
+            hosts:
+                "{{host1}}"
+                "{{host2}}"
+```
+
+And then amend your `ansible-playbook` command to add the extra host address:
+
+`ansible-playbook playbook.yaml -i ansible-inventory.yaml -e @<secrets_file>.yaml -e host1=<managed node IP address> -e host2=<second managed node address> --vault-password-file <vault password file>.yml`
+
+

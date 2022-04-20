@@ -129,5 +129,8 @@ geckodriver.log
 ## web driver ##
 geckodriver
 
+#secrets
+.secrets
+
 
 

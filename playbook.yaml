@@ -1,0 +1,128 @@
+- name: Confgure and run To-Do web app
+  hosts: managedhosts
+  remote_user: ec2-user
+
+  tasks:
+
+    - name: Yum update
+      shell:
+        cmd: sudo yum update -y 
+
+    - name: Install git with yum
+      yum:
+         name: git
+      become: yes
+
+    - name: Install python3 dependencies with yum
+      yum:
+        name: 
+          - openssl-devel
+          - libffi-devel
+          - bzip2-devel
+          - wget
+      become: yes
+
+    - name: Yum install development tools
+      shell:
+        cmd: sudo yum groupinstall "Development Tools" -y
+        creates: /usr/bin/python3        
+
+    - name: Check if Python tarball exists already
+      stat:
+        path: /home/ec2-user/Python-3.9.7.tgz
+      register: tarball_check_result
+
+    - name: Download Python 3.9.7
+      shell:
+        cmd:  wget https://www.python.org/ftp/python/3.9.7/Python-3.9.7.tgz
+        creates: /home/ec2-user/Python3.9.7.tgz
+      when: not tarball_check_result.stat.exists
+
+    - name: Check if Python unzipped dir exists already
+      stat:
+        path: /home/ec2-user/Python-3.9.7
+      register: python_dir_check_result
+
+    - name: Unzip Python 3.9.7
+      shell:
+        cmd: tar -xf Python-3.9.7.tgz
+        creates: /home/ec2-user/Python3.9.7
+      when: not python_dir_check_result.stat.exists
+
+    - name: Check if Python Makefile exists already
+      stat:
+        path: /home/ec2-user/Python-3.9.7/Makefile
+      register: python_makefile_check_result      
+
+    - name: Configure Python 3.9.7
+      shell:
+        chdir: /home/ec2-user/Python-3.9.7
+        cmd: sudo ./configure --enable-optimizations
+      when: not python_makefile_check_result.stat.exists
+            
+    - name: Make Python 3.9.7
+      shell:
+        chdir: /home/ec2-user/Python-3.9.7
+        cmd: make -j $(nproc) 
+        creates: /usr/local/lib/python3.9
+
+    - name: Make Python 3.9.7 altinstall
+      shell:
+        chdir: /home/ec2-user/Python-3.9.7
+        cmd: sudo make altinstall
+        creates: /usr/local/bin/python3.9
+
+    - name: Add Python3 environment variables to ec2-user bash profile
+      shell:
+        cmd: 
+            echo export PATH=/usr/local/bin:$PATH >> /home/ec2-user/.bash_profile; 
+            echo export PATH=/home/ec2-user/.local/bin/poetry:$PATH >> /home/ec2-user/.bash_profile;
+            echo export LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib >> /home/ec2-user/.bash_profile
+
+    - name: Install Poetry
+      ansible.builtin.shell: 
+        cmd: curl -sSL https://install.python-poetry.org | python3.9 - 
+    
+    - name: Create app directory
+      ansible.builtin.file:
+        path: /opt/todoapp
+        owner: ec2-user
+        state: directory
+        
+    - name: Git clone into /opt/todoapp if git repo doesn't exist
+      ansible.builtin.shell:
+        cmd: git clone https://github.com/mpursell/DevOps-Course-Starter /opt/todoapp
+        creates: /opt/todoapp/.gitignore
+
+    - name: Git pull into /opt/todoapp
+      ansible.builtin.shell:
+        cmd: git -C /opt/todoapp/ pull https://github.com/mpursell/DevOps-Course-Starter    
+
+    - name: Git checkout ansible-exercise branch
+      ansible.builtin.shell:
+        chdir: /opt/todoapp
+        cmd: git checkout ansible-exercise
+
+    - name: Install poetry in /opt/todoapp
+      ansible.builtin.shell:
+        chdir: /opt/todoapp 
+        cmd: /home/ec2-user/.local/bin/poetry install
+
+    - name: Template a file to /opt/todoapp/.env
+      ansible.builtin.template:
+        src: /home/ec2-user/.env.j2
+        dest: /opt/todoapp/.env
+
+    - name: Copy systemd defintion file to node
+      ansible.builtin.copy:
+        remote_src: yes
+        src: /opt/todoapp/todoapp.service
+        dest: /etc/systemd/system/todoapp.service
+      become: yes
+    
+    - name: Start systemd todoapp.service
+      ansible.builtin.systemd:
+        name: todoapp.service
+        state: started
+        daemon_reload: yes
+      become: yes
