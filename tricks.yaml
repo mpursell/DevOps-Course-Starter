@@ -1,0 +1,8 @@
+# tricks yaml for watchdog / watchmedo file system monitoring: 
+# https://github.com/gorakhargosh/watchdog/
+# run with 'watchmedo tricks tricks.yaml'
+tricks:
+- watchdog.tricks.ShellCommandTrick:
+    patterns: ["*.py", "*.html", ".env*", "*.toml"]
+    shell_command: "sudo docker-compose up testing"
+    ignore_directories: "/logs"

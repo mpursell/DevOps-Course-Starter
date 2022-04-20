@@ -53,7 +53,7 @@ def mock_complete_item(taskid, listid):
 def client():
 
     # use the test config instead of the prod config
-    file_path = find_dotenv('.env.test')
+    file_path = find_dotenv('.env.test', usecwd=True)
     load_dotenv(file_path, override=True)
 
     # create the app

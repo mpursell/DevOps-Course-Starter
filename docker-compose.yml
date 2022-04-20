@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+
+  production:
+    build: 
+      context: "."
+      target: production
+    image: todo-app:prod
+    container_name: todo_app_prod
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+
+  development:
+    build: 
+      context: "."
+      target: development
+    image: todo-app:dev
+    container_name: todo_app_dev
+    ports:
+      - "5001:5000"
+    env_file:
+      - .env
+    # want to mount the current directory so we can make code changes
+    volumes:
+      - type: bind
+        source: ./
+        target: /usr/src/todo_app
+
+
+  testing:
+    build: 
+      context: "."
+      target: testing
+    image: todo-app:testing
+    container_name: todo_app_testing
+    env_file:
+      - .env.test
+    # want to mount the current directory so we can make code changes
+    volumes:
+      - type: bind
+        source: ./
+        target: /usr/src/todo_app

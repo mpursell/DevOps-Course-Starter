@@ -168,3 +168,67 @@ And then amend your `ansible-playbook` command to add the extra host address:
 `ansible-playbook playbook.yaml -i ansible-inventory.yaml -e @<secrets_file>.yaml -e host1=<managed node IP address> -e host2=<second managed node address> --vault-password-file <vault password file>.yml`
 
 
+## Docker
+
+Both production and developement containers can be created with Docker.  As before you will need a .env file in the root folder, and the docker commands below assume you are running them from that root project folder.  
+
+### Building Development Containers
+
+Both production and development builds run from one multi-stage build documented in the Dockerfile.  In order to build development containers do the following:
+
+```
+$ docker-compose up development
+```
+
+This builds the "**development**" stage from the *Dockerfile*, and *docker-compose.yml* tags the image as "**todo-app:dev**"  The *docker-compose.yml* also assumes that the root folder is the build context that should be passed to docker ("**.**").
+
+The local:container ports will be mapped to **5000:5000** by default. 
+
+### Building Production Containers
+
+Very similar process to building a development container, but you need to target the "**production**" build stage in the Dockerfile to build the image with docker-compose:
+
+```
+$ docker-compose up production
+```
+The local:container ports will be mapped to **5001:5000** by default. 
+
+### Differences Between Production and Development Containers
+
+* Web servers - Production runs **gunicorn** and dev runs **flask**.  
+* Entrypoints - Production runs ./docker-entrypoint.sh in order to run gunicorn.  Development runs ./docker-entrypoint-dev.sh to run flask.  
+* Volume mounts - Production has no volumes mounted, development will try to mount a local folder to the container to allow for code updates. 
+* Local ports - Both prod and dev web servers run on port 5000 in the container.  Production is mapped 5000:5000 while development is mapped 5001:5000 so both containers can be run on the host simultaenously.
+
+### Building Testing Containers
+
+Very similar process to building a development container, but you need to target the "**testing**" build stage in the Dockerfile to build the image with docker-compose:
+
+```
+$ docker-compose up testing
+```
+This container will run automated unit / integration / e2e tests using pytest launched from the entrypoint shell script. 
+
+
+### Building and Running All Containers (Production / Development / Testing)
+
+To build and run images / containers for both prod and dev:
+
+```
+$ docker-compose up -d
+
+```
+The docker-compose command above will bring up containers for prod and dev and run them in detached mode.
+
+### Persistent Test Running 
+
+The repository includes a *tricks.yaml* in the root file which can be used in conjuncation with **watchdog/watchmedo** to run the docker test container everytime a change is made to a *\.py*, *\.html*, *\.env*, or *\.toml* file.  
+
+Install **watchdog/watchmedo** using the instructions here: https://github.com/gorakhargosh/watchdog/
+
+Once installed you can run
+
+```
+$ watchmedo tricks tricks.yaml
+``` 
+from the root project folder to monitor the folder.  The monitoring is recursive by default. 
