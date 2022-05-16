@@ -18,6 +18,7 @@ jobs:
   build:
     name: Build and test
     runs-on: ubuntu-latest
+    environment: Build and Test environment
     steps:
       - uses: actions/checkout@v2
       # only output hash of image and pass that to docker run
