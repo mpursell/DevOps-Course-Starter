@@ -1,11 +1,10 @@
 name: Workflow Status Notification
 on:
   workflow_run:
-    workflows: [Continuous Integration]
+    workflows: ["Continuous Integration"]
     types: [completed]
 
 jobs:
-  
   on-success:
     environment: Build and Test environment
     runs-on: ubuntu-latest
