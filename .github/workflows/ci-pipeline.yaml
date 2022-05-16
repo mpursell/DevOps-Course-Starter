@@ -18,7 +18,6 @@ jobs:
   build:
     name: Build and test
     runs-on: ubuntu-latest
-    environment: Build and Test environment
     steps:
       - uses: actions/checkout@v2
       # only output hash of image and pass that to docker run
@@ -27,6 +26,7 @@ jobs:
   slackNotification:
     name: Slack notification
     runs-on: ubuntu-latest
+    environment: Build and Test environment
     steps:
     - uses: actions/checkout@v2
     - name: Slack Notification Build & Test
