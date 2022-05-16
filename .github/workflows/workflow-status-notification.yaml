@@ -1,0 +1,32 @@
+name: Workflow Status Notification
+on:
+  workflow_run:
+    workflows: [Continuous Integration]
+    types: [completed]
+
+jobs:
+  
+  on-success:
+    environment: Build and Test environment
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification Workflow Passed
+        uses: bryannice/gitactions-slack-notification@2.0.0
+        env:
+          SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: 'Build and Test Workflow Success!'
+          SLACK_TITLE: 'SUCCESS - Build and Test Success!'
+  on-failure:
+    environment: Build and Test environment
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification Build & Test
+        uses: bryannice/gitactions-slack-notification@2.0.0
+        env:
+          SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: 'Build and Test Workflow Failed!'
+          SLACK_TITLE: 'FAILURE - Build and Test Workflow Failed'
