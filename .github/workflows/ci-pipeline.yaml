@@ -35,3 +35,17 @@ jobs:
         SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_MESSAGE: 'Build and test workflow running'
         SLACK_TITLE: 'Build and Test Notification'
+
+  resultNotify:
+    name: Notify
+    needs: build
+    runs-on: ubuntu-latest
+    environment: Build and Test environment
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification Success or Failure
+        uses: bryannice/gitactions-slack-notification@2.0.0
+        env:
+          SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: 'Build and test workflow - ${{ github.event.workflow_run.conclusion }}'
+          SLACK_TITLE: '${{ github.event.workflow_run.conclusion }} - Build and Test Notification'

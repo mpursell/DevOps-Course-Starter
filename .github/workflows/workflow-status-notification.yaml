@@ -2,9 +2,11 @@ name: Workflow Status Notification
 on:
   workflow_run:
     workflows: ["Continuous Integration"]
-    types: [completed]
+    types: 
+      - completed
 
 jobs:
+  name: Notify On Success
   on-success:
     environment: Build and Test environment
     runs-on: ubuntu-latest
@@ -17,6 +19,8 @@ jobs:
           SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_MESSAGE: 'Build and Test Workflow Success!'
           SLACK_TITLE: 'SUCCESS - Build and Test Success!'
+  
+  name: Notify On Failure
   on-failure:
     environment: Build and Test environment
     runs-on: ubuntu-latest
