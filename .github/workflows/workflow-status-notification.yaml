@@ -1,12 +1,14 @@
 name: Workflow Status Notification
 on:
+  # note workflow_run only triggers if workflow file is on the deafult branch!
   workflow_run:
     workflows: ["Continuous Integration"]
     types: 
       - completed
 
 jobs:
-  name: Notify On Success
+  name: Notify
+  needs: 
   on-success:
     environment: Build and Test environment
     runs-on: ubuntu-latest
