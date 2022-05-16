@@ -2,10 +2,10 @@ name: Continous Intergration
 on: 
   push:
     paths-ignore:
-      -'README.md'
-      -'tricks.yaml'
-      -'.\documentation\*'
-      -'.\logs\*'
+      -'./README.md'
+      -'./tricks.yaml'
+      -'documentation/**'
+      -'logs/**'
   
   pull_request:
     paths-ignore:
