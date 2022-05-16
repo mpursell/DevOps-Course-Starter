@@ -1,4 +1,4 @@
-name: Continous Intergration
+name: Continuous Integration
 on: 
   push:
     paths-ignore:
@@ -9,7 +9,10 @@ on:
   
   pull_request:
     paths-ignore:
-        -'README.md'
+      -'./README.md'
+      -'./tricks.yaml'
+      -'documentation/**'
+      -'logs/**'
 
 jobs:
   build:
@@ -19,3 +22,19 @@ jobs:
       - uses: actions/checkout@v2
       # only output hash of image and pass that to docker run
       - run: docker run --rm $(docker build -q . --target testing)
+
+name: Notification
+on: 
+  workflows: ["Build and test"]
+  jobs:
+    slackNotification:
+      name: Slack notification
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@master
+      - name: Slack Notification Build & Test
+        uses: bryannice/gitactions-slack-notification@2.0.0
+        env:
+          SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_MESSAGE: 'Build and test workflow running'
+          SLACK_TITLE: 'Build and Test Notification'
