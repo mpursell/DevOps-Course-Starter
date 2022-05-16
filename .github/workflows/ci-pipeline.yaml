@@ -1,5 +1,15 @@
 name: Continous Intergration
-on: [push]
+on: 
+  push:
+    paths-ignore:
+      -'README.md'
+      -'tricks.yaml'
+      -'.\documentation\*'
+      -'.\logs\*'
+  
+  pull_request:
+    paths-ignore:
+        -'README.md'
 
 jobs:
   build:
@@ -7,4 +17,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # only output hash of image and pass that to docker run
       - run: docker run --rm $(docker build -q . --target testing)
