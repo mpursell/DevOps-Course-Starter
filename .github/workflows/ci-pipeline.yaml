@@ -23,18 +23,18 @@ jobs:
       # only output hash of image and pass that to docker run
       - run: docker run --rm $(docker build -q . --target testing)
 
-name: Notification
 on: 
   workflows: ["Build and test"]
-  jobs:
-    slackNotification:
-      name: Slack notification
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@master
-      - name: Slack Notification Build & Test
-        uses: bryannice/gitactions-slack-notification@2.0.0
-        env:
-          SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_MESSAGE: 'Build and test workflow running'
-          SLACK_TITLE: 'Build and Test Notification'
+
+jobs:
+  slackNotification:
+    name: Slack notification
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Slack Notification Build & Test
+      uses: bryannice/gitactions-slack-notification@2.0.0
+      env:
+        SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        SLACK_MESSAGE: 'Build and test workflow running'
+        SLACK_TITLE: 'Build and Test Notification'
