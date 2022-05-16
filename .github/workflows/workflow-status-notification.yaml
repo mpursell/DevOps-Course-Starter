@@ -1,4 +1,4 @@
-name: Workflow Status Notification
+name: Workflow Notification
 on:
   # note workflow_run only triggers if workflow file is on the deafult branch!
   workflow_run:
