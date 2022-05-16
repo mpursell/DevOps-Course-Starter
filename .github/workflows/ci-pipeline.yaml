@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: docker-compose up testing
+      - run: docker build . --target testing && docker run todo-app:testing
