@@ -1,6 +1,7 @@
 name: Slack Notification
 on:
-  workflows: ["Build and test"]
+  workflow_run:
+    workflows: ["Build and test"]
 
 jobs:
   slackNotification:
