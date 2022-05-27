@@ -14,6 +14,7 @@ Vagrantfile
 todoapp.service
 
 # 
+.git
 test_coverage.txt
 .gitignore
 README.md
