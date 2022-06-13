@@ -1,12 +1,13 @@
 name: Workflow Notification
 on:
-  # note workflow_run only triggers if workflow file is on the deafult branch!
+  # note workflow_run only triggers if workflow file is on the default branch!
   workflow_run:
     workflows: ["Continuous Integration"]
     types: 
       - completed
 
 jobs:
+  notify:
   name: Notify
   needs: 
   on-success:
@@ -22,6 +23,7 @@ jobs:
           SLACK_MESSAGE: 'Build and Test Workflow Success!'
           SLACK_TITLE: 'SUCCESS - Build and Test Success!'
   
+  notifyOnFailure:
   name: Notify On Failure
   on-failure:
     environment: Build and Test environment

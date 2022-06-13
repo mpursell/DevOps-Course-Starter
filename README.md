@@ -232,3 +232,11 @@ Once installed you can run
 $ watchmedo tricks tricks.yaml
 ``` 
 from the root project folder to monitor the folder.  The monitoring is recursive by default. 
+
+## CI Pipeline Config
+
+The project is currently setup to use4 Github Actions as the CI pipeline.  The workflows are defined in the YAML files in `.github/workflows`
+
+* black.yaml - this lints the code with the Black code linter
+* ci-pipeline - this builds and tests the code
+* workflow-status-notifications - this pushes Slack notifications both when the pipeline runs and when it has succeeded / failed
