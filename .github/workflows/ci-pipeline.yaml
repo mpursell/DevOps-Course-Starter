@@ -56,6 +56,6 @@ jobs:
           IMAGE_NAME: TodoApp
           USERNAME: ${{ secrets.DOCKER_USERNAME }}
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          TAG_NAME: "Production"
+          TAG_NAME: "Production", ${{ GITHUB_SHA }}
           BUILDX: "true"
 
