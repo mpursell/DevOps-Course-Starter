@@ -45,13 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-    - uses: actions/checkout@v1
-    - with:
+      uses: actions/checkout@v1
+      with:
         fetch-depth: 1
 
     - name: Build & Push to Docker Hub
-    - uses: opspresso/action-docker@master
-    - with:
+      uses: opspresso/action-docker@master
+      with:
         args: --docker
       env:
         IMAGE_NAME: TodoApp
