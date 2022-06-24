@@ -39,10 +39,7 @@ jobs:
 
   docker:
     needs: build
-    on:
-      push:
-        branches:
-          -module8
+    if: github.repository == 'DevOps-Course-Starter/module8'
     runs-on: ubuntu-latest
     environment: Build and Test environment
     steps:
