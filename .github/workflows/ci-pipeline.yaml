@@ -54,10 +54,10 @@ jobs:
       with:
         args: --docker
       env:
-        IMAGE_NAME: TodoApp
+        IMAGE_NAME: todoApp
         USERNAME: ${{ secrets.DOCKER_USERNAME }}
         PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        TAG_NAME: "Production"
+        TAG_NAME: "production"
         BUILDX: "true"
 
 
