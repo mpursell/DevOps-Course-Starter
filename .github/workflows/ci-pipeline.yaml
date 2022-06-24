@@ -67,8 +67,8 @@ jobs:
         IMAGE_NAME: todoapp
         USERNAME: ${{ secrets.DOCKER_USERNAME }}
         PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        TAG_NAME: "production"
+        TAG_NAME: "latest"
         BUILDX: "true"
-        
+
 
 
