@@ -39,9 +39,9 @@ jobs:
 
   docker:
     needs: build
-    # rules:
-    # - if: github.event_name == 'push'
-    # - and: github.ref == 'master'
+    rules:
+    - if: github.event_name == 'push'
+    - and: github.ref == 'module8'
     runs-on: ubuntu-latest
     environment: Build and Test environment
     steps:
@@ -57,7 +57,7 @@ jobs:
     
     # https://github.com/docker/setup-buildx-action
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v1q
 
     - name: Build & Push to Docker Hub
       uses: opspresso/action-docker@master
