@@ -5,7 +5,7 @@ RUN mkdir -p /usr/src/todo_app
 WORKDIR /usr/src/todo_app
 
 RUN apt update -y &&\ 
-    apt install curl -y &&\
+    apt install curl -y -f &&\
     curl -o get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py &&\
     chmod +x get-poetry.py &&\ 
     python get-poetry.py &&\
