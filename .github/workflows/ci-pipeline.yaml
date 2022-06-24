@@ -42,6 +42,7 @@ jobs:
     # - if: github.event_name == 'push'
     # - and: github.ref == 'master'
     runs-on: ubuntu-latest
+    environment: Build and Test environment
     steps:
     - name: Checkout
       uses: actions/checkout@v1
