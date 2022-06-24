@@ -63,11 +63,12 @@ jobs:
       uses: opspresso/action-docker@master
       with:
         args: --docker
+        tags: mikerp/todoapp/todoapp:latest
       env:
         IMAGE_NAME: todoapp
         USERNAME: ${{ secrets.DOCKER_USERNAME }}
         PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        TAG_NAME: "latest"
+        #TAG_NAME: "latest"
         BUILDX: "true"
 
 
