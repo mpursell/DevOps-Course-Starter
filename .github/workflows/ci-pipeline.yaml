@@ -65,7 +65,7 @@ jobs:
         args: --docker
         #tags: mikerp/todoapp/todoapp:latest
       env:
-        IMAGE_NAME: mikerp/todoapp
+        IMAGE_NAME: mikerp/todoapp/todoapp
         USERNAME: ${{ secrets.DOCKER_USERNAME }}
         PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         TAG_NAME: "latest"
