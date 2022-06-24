@@ -38,6 +38,7 @@ jobs:
 
   docker:
     needs: build
+    on: push
     # rules:
     # - if: github.event_name == 'push'
     # - and: github.ref == 'master'
@@ -58,4 +59,5 @@ jobs:
         PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         TAG_NAME: "Production", ${{ GITHUB_SHA }}
         BUILDX: "true"
+
 
