@@ -37,7 +37,6 @@ jobs:
         SLACK_TITLE: 'Build and Test Notification'
 
 
-
   docker:
     needs: build
     # rules:
