@@ -38,7 +38,6 @@ jobs:
 
   docker:
     needs: build
-    on: push
     # rules:
     # - if: github.event_name == 'push'
     # - and: github.ref == 'master'
