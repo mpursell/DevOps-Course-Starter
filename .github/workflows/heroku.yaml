@@ -1,10 +1,11 @@
 name: Heroku container push #set whatevername you want to your github job
 on: 
   push: # set the events you would like to trigger this job
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Build and Test environment
     steps:
       - name: Checkout
         uses: actions/checkout@v2
