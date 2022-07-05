@@ -69,7 +69,6 @@ jobs:
         TAG_NAME: "latest"
         BUILDX: "true"
 
-  heroku:
     - name: 'heroku container push' #set whatevername you want to your github job
       on: {'push'} # set the events you would like to trigger this job
       jobs:
