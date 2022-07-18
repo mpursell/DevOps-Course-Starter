@@ -4,7 +4,9 @@ name: Deploy to Heroku.
 # Run workflow on every push to master branch.
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+      - module8_stretch
 
 # Your workflows jobs.
 jobs:
