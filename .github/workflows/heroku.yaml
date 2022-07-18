@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - master
-      - module8_stretch
 
 # Your workflows jobs.
 jobs:
