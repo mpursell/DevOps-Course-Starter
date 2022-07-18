@@ -284,7 +284,7 @@ $ heroku container:release web
 This will make the application ready to run, but before it can run successfully, you'll need to set your configuration up. 
 You need to set your environment variables in heroku by going to https://dashboard.heroku.com/apps/$appName > Settings > Config Vars
 
-Once the configuration has been setup you can either run the app from https://dashboard.heroku.com/apps/$appName or from https://$appName.heroku.com
+Once the configuration has been setup you can either run the app from https://dashboard.heroku.com/apps/$appName or from https://$appName.herokuapp.com
 
 
 
