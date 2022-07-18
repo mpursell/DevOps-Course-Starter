@@ -11,6 +11,7 @@ on:
 # Your workflows jobs.
 jobs:
   build:
+    environment: Build and Test environment
     runs-on: ubuntu-latest
     steps:
       # Check-out your repository.
