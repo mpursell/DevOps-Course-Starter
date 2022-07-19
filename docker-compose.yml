@@ -42,3 +42,14 @@ services:
       - type: bind
         source: ./
         target: /usr/src/todo_app
+
+  herokubuild:
+    build: 
+      context: "."
+      target: herokubuild
+    image: registry.heroku.com/mike-todoapp/web
+    container_name: todo_app_heroku
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env

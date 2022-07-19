@@ -36,3 +36,37 @@ jobs:
         SLACK_MESSAGE: 'Build and test workflow running'
         SLACK_TITLE: 'Build and Test Notification'
 
+
+  docker:
+    needs: build
+    if: ${{github.ref_name == 'master'}}
+    runs-on: ubuntu-latest
+    environment: Build and Test environment
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    
+    # Setup docker buildx
+    # https://github.com/docker/setup-qemu-action
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+    
+    # https://github.com/docker/setup-buildx-action
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build & Push to Docker Hub
+      uses: opspresso/action-docker@master
+      with:
+        args: --docker
+
+      env:
+        IMAGE_NAME: mikerp/todoapp
+        USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        TAG_NAME: "latest"
+        BUILDX: "true"
+
+
