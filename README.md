@@ -287,4 +287,29 @@ You need to set your environment variables in heroku by going to https://dashboa
 Once the configuration has been setup you can either run the app from https://dashboard.heroku.com/apps/$appName or from https://$appName.herokuapp.com
 
 
+## Deploying to Azure App Service
+
+### Create the app 
+
+* Create the app service plan:
+```
+$ az appservice plan create --resource-group<resource_group_name> -n <appservice_plan_name> --sku B1 --is-linux
+```
+* Create the web app:
+```
+$az webapp create --resource-group <resource_group_name> --plan <appservice_plan_name> --name <webapp_name> --deployment-container-image-name <dockerhub_username>/todo-app:latest
+```
+* Setup the config / environment for the web app:
+```
+$ az webapp config appsettings set -g <resource_group_name> -n<webapp_name> --settings @settings.json
+```
+where settings.json contains the key:value pairs of your enviroment variables. 
+
+### Configure the app
+
+Go into the app in the Azure portal, and go to Deployment Center.  There you need to configure the docker public registry and the image you want to pull from docker. 
+
+### Diagnostics
+
+log files can be found in the Azure portal / your web app / Log Stream, or in the Deployment Center / Logs
 
