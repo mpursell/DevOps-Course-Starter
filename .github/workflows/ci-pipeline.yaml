@@ -42,7 +42,7 @@ jobs:
     environment: Build and Test environment
     steps:
       - name: Azure Container Service Publish
-        uses: actions/checkout@v2
+        #uses: actions/checkout@v2
         run: curl -dH -X POST ${{ AZURE_WEBHOOK_URL }}
 
   docker:
