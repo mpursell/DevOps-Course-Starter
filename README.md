@@ -241,51 +241,6 @@ The project is currently setup to use4 Github Actions as the CI pipeline.  The w
 * ci-pipeline - this builds and tests the code
 * workflow-status-notifications - this pushes Slack notifications both when the pipeline runs and when it has succeeded / failed
 
-## Heroku  
-
-### Building the image 
-
-In order to deploy to heroku, a specific set of container build instructions and content is required. Run:
-
-
-```
-$ docker build . --target herokubuild --tags registry.heroku.com/mike-todoapp/web:latest
-``` 
-
-or: 
-
-```
-$ docker-compose build . herokubuild
-``` 
- 
-in order to build the image ready for heroku deployment. 
-
-### Pushing the heroku image
-
-You'll need to download the heroku CLI from https://devcenter.heroku.com/articles/heroku-cli.  Login with 
-
-```
-$ heroku login
-``` 
-
-When the docker image is built and ready to deploy, push the image to the heroku registry:
-
-```
-$ docker push registry.heroku.com/mike-todoapp/web
-``` 
-
-The container will be pushed but won't be ready for use until you release it via the heroku CLI:
-
-
-```
-$ heroku container:release web
-``` 
-
-This will make the application ready to run, but before it can run successfully, you'll need to set your configuration up. 
-You need to set your environment variables in heroku by going to https://dashboard.heroku.com/apps/$appName > Settings > Config Vars
-
-Once the configuration has been setup you can either run the app from https://dashboard.heroku.com/apps/$appName or from https://$appName.herokuapp.com
-
 
 ## Deploying to Azure App Service
 
