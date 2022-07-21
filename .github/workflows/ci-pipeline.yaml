@@ -40,7 +40,10 @@ jobs:
     name: Azure Container Service Publish
     runs-on: ubuntu-latest
     environment: Build and Test environment
-    run: curl -dH -X POST ${{ AZURE_WEBHOOK_URL }}
+    steps:
+      - name: Azure Container Service Publish
+        uses: actions/checkout@v2
+        run: curl -dH -X POST ${{ AZURE_WEBHOOK_URL }}
 
   docker:
     needs: build
