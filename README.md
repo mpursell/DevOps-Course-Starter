@@ -239,7 +239,6 @@ The project is currently setup to use4 Github Actions as the CI pipeline.  The w
 
 * black.yaml - this lints the code with the Black code linter
 * ci-pipeline - this builds and tests the code, then publishes the app to Azure Web Apps
-* workflow-status-notifications - this pushes Slack notifications both when the pipeline runs and when it has succeeded / failed
 
 
 ## Deploying to Azure App Service
@@ -266,5 +265,5 @@ Go into the app in the Azure portal, and go to Deployment Center.  There you nee
 
 ### Diagnostics
 
-log files can be found in the Azure portal / your web app / Log Stream, or in the Deployment Center / Logs
+Log files can be found in the Azure portal / your web app / Log Stream, or in the Deployment Center / Logs
 
