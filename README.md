@@ -243,6 +243,8 @@ The project is currently setup to use4 Github Actions as the CI pipeline.  The w
 
 ## Deploying to Azure App Service
 
+The current URL of the Azure application is https://opencohort21michaelpursellwebapp.azurewebsites.net
+
 ### Create the app 
 
 * Create the app service plan:
@@ -266,4 +268,6 @@ Go into the app in the Azure portal, and go to Deployment Center.  There you nee
 ### Diagnostics
 
 Log files can be found in the Azure portal / your web app / Log Stream, or in the Deployment Center / Logs
+
+
 
