@@ -238,53 +238,36 @@ from the root project folder to monitor the folder.  The monitoring is recursive
 The project is currently setup to use4 Github Actions as the CI pipeline.  The workflows are defined in the YAML files in `.github/workflows`
 
 * black.yaml - this lints the code with the Black code linter
-* ci-pipeline - this builds and tests the code
-* workflow-status-notifications - this pushes Slack notifications both when the pipeline runs and when it has succeeded / failed
-
-## Heroku  
-
-### Building the image 
-
-In order to deploy to heroku, a specific set of container build instructions and content is required. Run:
+* ci-pipeline - this builds and tests the code, then publishes the app to Azure Web Apps
 
 
+## Deploying to Azure App Service
+
+The current URL of the Azure application is https://opencohort21michaelpursellwebapp.azurewebsites.net
+
+### Create the app 
+
+* Create the app service plan:
 ```
-$ docker build . --target herokubuild --tags registry.heroku.com/mike-todoapp/web:latest
-``` 
-
-or: 
-
+$ az appservice plan create --resource-group<resource_group_name> -n <appservice_plan_name> --sku B1 --is-linux
 ```
-$ docker-compose build . herokubuild
-``` 
- 
-in order to build the image ready for heroku deployment. 
-
-### Pushing the heroku image
-
-You'll need to download the heroku CLI from https://devcenter.heroku.com/articles/heroku-cli.  Login with 
-
+* Create the web app:
 ```
-$ heroku login
-``` 
-
-When the docker image is built and ready to deploy, push the image to the heroku registry:
-
+$az webapp create --resource-group <resource_group_name> --plan <appservice_plan_name> --name <webapp_name> --deployment-container-image-name <dockerhub_username>/todo-app:latest
 ```
-$ docker push registry.heroku.com/mike-todoapp/web
-``` 
-
-The container will be pushed but won't be ready for use until you release it via the heroku CLI:
-
-
+* Setup the config / environment for the web app:
 ```
-$ heroku container:release web
-``` 
+$ az webapp config appsettings set -g <resource_group_name> -n<webapp_name> --settings @settings.json
+```
+where settings.json contains the key:value pairs of your enviroment variables. 
 
-This will make the application ready to run, but before it can run successfully, you'll need to set your configuration up. 
-You need to set your environment variables in heroku by going to https://dashboard.heroku.com/apps/$appName > Settings > Config Vars
+### Configure the app
 
-Once the configuration has been setup you can either run the app from https://dashboard.heroku.com/apps/$appName or from https://$appName.herokuapp.com
+Go into the app in the Azure portal, and go to Deployment Center.  There you need to configure the docker public registry and the image you want to pull from docker. 
+
+### Diagnostics
+
+Log files can be found in the Azure portal / your web app / Log Stream, or in the Deployment Center / Logs
 
 
 
