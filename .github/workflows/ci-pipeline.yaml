@@ -76,6 +76,5 @@ jobs:
     needs: docker
     steps:
       - name: Azure Container Service Publish
-        #uses: actions/checkout@v2
         run: curl -dH -X POST ${{ secrets.AZURE_WEBHOOK_URL }}
 
