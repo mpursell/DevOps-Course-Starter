@@ -15,6 +15,7 @@ on:
       -'logs/**'
 
 jobs:
+
   build:
     name: Build and test
     runs-on: ubuntu-latest
@@ -35,7 +36,6 @@ jobs:
         SLACK_INCOMING_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_MESSAGE: 'Build and test workflow running'
         SLACK_TITLE: 'Build and Test Notification'
-
 
   docker:
     needs: build
@@ -69,4 +69,12 @@ jobs:
         TAG_NAME: "latest"
         BUILDX: "true"
 
+  azurePublish:
+    name: Azure Container Service Publish
+    runs-on: ubuntu-latest
+    environment: Build and Test environment
+    needs: docker
+    steps:
+      - name: Azure Container Service Publish
+        run: curl -dH -X POST ${{ secrets.AZURE_WEBHOOK_URL }}
 
