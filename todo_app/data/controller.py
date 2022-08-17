@@ -4,9 +4,10 @@ import requests
 import os
 import pymongo
 
+
 class DatabaseAbstract(ABC):
-# interface to describe what our database class must implement
-    
+    # interface to describe what our database class must implement
+
     def __init__(self, connectionString) -> None:
         pass
 
@@ -16,14 +17,13 @@ class DatabaseAbstract(ABC):
 
     def connectDatabase(connectionString):
         pass
-   
+
 
 class AppDatabase(DatabaseAbstract):
-
     def __init__(self, connectionString) -> None:
-    
+
         self._connectionString = connectionString
-        
+
     @property
     def databaseName(self):
         return self._databaseName
@@ -32,7 +32,7 @@ class AppDatabase(DatabaseAbstract):
     def databaseName(self, value):
         self._databaseName = value
         return self._databaseName
-    
+
     @property
     def collectionName(self):
         return self._collectionName
@@ -45,8 +45,9 @@ class AppDatabase(DatabaseAbstract):
     # Connect to database
     def connectDatabase(self, databaseName):
         client = pymongo.MongoClient(self._connectionString)
-        applicationDB = client[databaseName] 
-        return applicationDB        
+        applicationDB = client[databaseName]
+        return applicationDB
+
 
 class ViewModel:
     def __init__(self, items):
@@ -55,6 +56,3 @@ class ViewModel:
     @property
     def items(self):
         return self._items
-    
-
-    

@@ -24,7 +24,7 @@ def create_app():
             level=logging.INFO,
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
-    
+
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
 
@@ -44,15 +44,15 @@ def create_app():
         title = request.form.get("title")
         description = request.form.get("description")
         listName = request.form.get("listName")
-        
+
         document = {
-            'title': title,
-            'description': description,
+            "title": title,
+            "description": description,
         }
-        
+
         collection = todo[listName]
-        collection.insert_one(document) 
-        
+        collection.insert_one(document)
+
         # listId = get_list_by_name(list)
         # add_item(title, description, listId)
 

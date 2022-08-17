@@ -8,6 +8,7 @@ apiKey = os.environ.get("API_KEY")
 apiToken = os.environ.get("API_TOKEN")
 boardID = os.environ.get("TRELLO_BOARD_ID")
 
+
 class Card:
     @property
     def name(self):
