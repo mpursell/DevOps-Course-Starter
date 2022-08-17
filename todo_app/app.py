@@ -43,10 +43,18 @@ def create_app():
 
         title = request.form.get("title")
         description = request.form.get("description")
-        list = request.form.get("listName")
-        listId = get_list_by_name(list)
-
-        add_item(title, description, listId)
+        listName = request.form.get("listName")
+        
+        document = {
+            'title': title,
+            'description': description,
+        }
+        
+        collection = todo[listName]
+        collection.insert_one(document) 
+        
+        # listId = get_list_by_name(list)
+        # add_item(title, description, listId)
 
         return redirect("/")
 
