@@ -4,6 +4,7 @@ from flask import request
 
 from todo_app.flask_config import Config
 from todo_app.data.trello_items import *
+from todo_app.data.controller import *
 from werkzeug.utils import redirect
 
 import logging
@@ -23,11 +24,16 @@ def create_app():
             level=logging.INFO,
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
+    
+    mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
+    applicationDatabase = os.environ.get("MONGO_DB_NAME")
+
+    todo = AppDatabase(mongodbConnectionString).connectDatabase(applicationDatabase)
 
     @app.route("/")
     def index():
 
-        cardList = get_items()
+        cardList: list = todo.list_collection_names()
         card_view_model = ViewModel(cardList)
 
         return render_template("index.html", view_model=card_view_model)
