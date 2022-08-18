@@ -122,13 +122,13 @@ class Api_handler:
         return requests.post(self.url, params=self.requestAuthPayload, data=self.body)
 
 
-class ViewModel:
-    def __init__(self, items):
-        self._items = items
+# class ViewModel:
+#     def __init__(self, items):
+#         self._items = items
 
-    @property
-    def items(self):
-        return self._items
+#     @property
+#     def items(self):
+#         return self._items
 
 
 def get_items() -> list[object]:

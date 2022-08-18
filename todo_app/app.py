@@ -33,10 +33,17 @@ def create_app():
     @app.route("/")
     def index():
 
-        cardList: list = todo.list_collection_names()
-        card_view_model = ViewModel(cardList)
 
-        return render_template("index.html", view_model=card_view_model)
+        categoryNameList: list = ['To-Do', 'Doing', 'Done']
+        filteredCollectionList: list = []
+        
+        for categoryName in categoryNameList:
+            filteredCollectionList.append(todo.list_collection_names(filter={'name': f'{categoryName}'})[0])
+        
+        collection_view_model = ViewModel(filteredCollectionList)
+        
+
+        return render_template("index.html", view_model=collection_view_model)
 
     @app.route("/add", methods=["POST"])
     def add_Task():
