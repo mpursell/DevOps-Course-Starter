@@ -64,9 +64,10 @@ def create_app():
         document = {
             "title": title,
             "description": description,
+            "status":listName
         }
 
-        collection = todo[listName]
+        collection = todo.todo
         collection.insert_one(document)
 
         # listId = get_list_by_name(list)
