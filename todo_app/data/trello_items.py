@@ -131,35 +131,35 @@ class Api_handler:
 #         return self._items
 
 
-def get_items() -> list[object]:
-    """
-    Fetches all cards on the given Trello board ID.
+# def get_items() -> list[object]:
+#     """
+#     Fetches all cards on the given Trello board ID.
 
-    Returns:
-        list: JSON from the API parsed to a list of dictionaries.
-    """
+#     Returns:
+#         list: JSON from the API parsed to a list of dictionaries.
+#     """
 
-    apiCall = Api_handler()
-    apiCall.url = "https://api.trello.com/1/boards/{}/cards?".format(boardID)
-    response = apiCall.make_get_call()
+#     apiCall = Api_handler()
+#     apiCall.url = "https://api.trello.com/1/boards/{}/cards?".format(boardID)
+#     response = apiCall.make_get_call()
 
-    returnedList = response.json()
+#     returnedList = response.json()
 
-    cardList = []
-    for item in returnedList:
-        card = Card()
-        card.name = item["name"]
-        card.id = item["id"]
-        card.idShort = item["idShort"]
-        card.idBoard = item["idBoard"]
-        card.description = item["desc"]
-        card.listName = get_list(card.id)
-        card.taskUrl = f"/tasks/?taskId={card.id}"
+#     cardList = []
+#     for item in returnedList:
+#         card = Card()
+#         card.name = item["name"]
+#         card.id = item["id"]
+#         card.idShort = item["idShort"]
+#         card.idBoard = item["idBoard"]
+#         card.description = item["desc"]
+#         card.listName = get_list(card.id)
+#         card.taskUrl = f"/tasks/?taskId={card.id}"
 
-        cardList.append(card)
+#         cardList.append(card)
 
-    # return list of objects with required attributes
-    return cardList
+#     # return list of objects with required attributes
+#     return cardList
 
 
 def get_list(cardID: str) -> str:
@@ -195,30 +195,30 @@ def get_list_by_name(listName: str) -> str:
             return trelloList["id"]
 
 
-def get_item(id: str) -> object:
-    """
-    Fetches the saved item with the specified ID.
+# def get_item(id: str) -> object:
+#     """
+#     Fetches the saved item with the specified ID.
 
-    Args:
-        id: The ID of the item.
+#     Args:
+#         id: The ID of the item.
 
-    Returns:
-        item: The saved item, or None if no items match the specified ID.
-    """
+#     Returns:
+#         item: The saved item, or None if no items match the specified ID.
+#     """
 
-    apiCall = Api_handler()
-    apiCall.url = "https://api.trello.com/1/cards/{}".format(id)
+#     apiCall = Api_handler()
+#     apiCall.url = "https://api.trello.com/1/cards/{}".format(id)
 
-    response = apiCall.make_get_call()
-    returnedDict = response.json()
+#     response = apiCall.make_get_call()
+#     returnedDict = response.json()
 
-    card = Card()
-    card.id = returnedDict["id"]
-    card.description = returnedDict["desc"]
-    card.name = returnedDict["name"]
-    card.listName = get_list(card.id)
+#     card = Card()
+#     card.id = returnedDict["id"]
+#     card.description = returnedDict["desc"]
+#     card.name = returnedDict["name"]
+#     card.listName = get_list(card.id)
 
-    return card
+#     return card
 
 
 def add_item(title: str, description: str, idList: str) -> dict:

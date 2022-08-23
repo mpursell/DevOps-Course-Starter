@@ -3,6 +3,7 @@ from abc import ABC
 import requests
 import os
 import pymongo
+from bson import ObjectId
 
 
 class DatabaseAbstract(ABC):
@@ -57,7 +58,9 @@ class ViewModel:
     def items(self):
         return self._items
 
+
 class Card:
+
     @property
     def name(self):
         return self._name
@@ -124,3 +127,54 @@ class Card:
     def taskUrl(self, value):
         self._taskUrl = value
         return self._taskUrl
+
+
+def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
+    
+    """
+    Gets a list of documents as a 
+    
+    Args:
+        documentList: a pymongo Cursor from the database 
+    
+    Returns: 
+        cardList: a list of Card objects with attributes added. 
+    """
+    cardList = []
+
+    for document in documentList:
+        card = Card()
+        card.listName = document["status"]
+        card.name = document["title"]
+        card.description = document["description"]
+        card.id = str(document["_id"]).strip("'")
+        card.idShort = card.id[:5]
+        cardList.append(card)
+
+    return cardList
+
+def get_item(collection, id: str) -> object:
+    """
+    Fetches the MongoDB document with the specified ID.
+
+    Args:
+        id: The ID of the item.
+        collection: the MongoDB document collection object
+
+    Returns:
+        card: the card representation of the MongoDB document, 
+        or None if no items match the specified ID.
+    """
+
+    returnedDocument = collection.find_one({"_id": ObjectId(id)})
+
+    try:
+        card = Card()
+        card.id = returnedDocument["_id"]
+        card.description = returnedDocument["description"]
+        card.name = returnedDocument["title"]
+        card.listName = returnedDocument['status']
+
+        return card
+    except:
+        return None

@@ -38,17 +38,7 @@ def create_app():
         documents = collection.find()
         #
 
-        cardList = []
-
-        for document in documents:
-            card = Card()
-            card.listName = document["status"]
-            card.name = document["title"]
-            card.description = document["description"]
-            card.id = str(document["_id"]).strip("'")
-            card.idShort = card.id[:5]
-            cardList.append(card)
-        
+        cardList = getItems(documents)
         cardList_view_model = ViewModel(cardList)
         
         return render_template("index.html", view_model=cardList_view_model)
@@ -70,16 +60,14 @@ def create_app():
         collection = todo.todo
         collection.insert_one(document)
 
-        # listId = get_list_by_name(list)
-        # add_item(title, description, listId)
-
         return redirect("/")
 
     @app.route("/task/", methods=["GET"])
     def get_Task():
 
+        documentCollection = todo.todo
         taskId = request.args.get("taskId")
-        task = get_item(taskId)
+        task = get_item(documentCollection, taskId)
 
         return render_template("task.html", task=task, taskId=task.id)
 
