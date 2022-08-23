@@ -60,7 +60,6 @@ class ViewModel:
 
 
 class Card:
-
     @property
     def name(self):
         return self._name
@@ -130,15 +129,15 @@ class Card:
 
 
 def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
-    
+
     """
-    Gets a list of documents as a 
-    
+    Gets a list of documents as a
+
     Args:
-        documentList: a pymongo Cursor from the database 
-    
-    Returns: 
-        cardList: a list of Card objects with attributes added. 
+        documentList: a pymongo Cursor from the database
+
+    Returns:
+        cardList: a list of Card objects with attributes added.
     """
     cardList = []
 
@@ -153,6 +152,7 @@ def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
 
     return cardList
 
+
 def get_item(collection, id: str) -> object:
     """
     Fetches the MongoDB document with the specified ID.
@@ -162,7 +162,7 @@ def get_item(collection, id: str) -> object:
         collection: the MongoDB document collection object
 
     Returns:
-        card: the card representation of the MongoDB document, 
+        card: the card representation of the MongoDB document,
         or None if no items match the specified ID.
     """
 
@@ -173,7 +173,7 @@ def get_item(collection, id: str) -> object:
         card.id = returnedDocument["_id"]
         card.description = returnedDocument["description"]
         card.name = returnedDocument["title"]
-        card.listName = returnedDocument['status']
+        card.listName = returnedDocument["status"]
 
         return card
     except:

@@ -33,16 +33,15 @@ def create_app():
     @app.route("/")
     def index():
 
-        # MongoClient document finding 
+        # MongoClient document finding
         collection = todo.todo
         documents = collection.find()
         #
 
         cardList = getItems(documents)
         cardList_view_model = ViewModel(cardList)
-        
-        return render_template("index.html", view_model=cardList_view_model)
 
+        return render_template("index.html", view_model=cardList_view_model)
 
     @app.route("/add", methods=["POST"])
     def add_Task():
@@ -51,11 +50,7 @@ def create_app():
         description = request.form.get("description")
         listName = request.form.get("listName")
 
-        document = {
-            "title": title,
-            "description": description,
-            "status":listName
-        }
+        document = {"title": title, "description": description, "status": listName}
 
         collection = todo.todo
         collection.insert_one(document)
