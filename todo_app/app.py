@@ -33,17 +33,26 @@ def create_app():
     @app.route("/")
     def index():
 
+        # MongoClient document finding 
+        collection = todo.todo
+        documents = collection.find()
+        #
 
-        categoryNameList: list = ['To-Do', 'Doing', 'Done']
-        filteredCollectionList: list = []
-        
-        for categoryName in categoryNameList:
-            filteredCollectionList.append(todo.list_collection_names(filter={'name': f'{categoryName}'})[0])
-        
-        collection_view_model = ViewModel(filteredCollectionList)
-        
+        cardList = []
 
-        return render_template("index.html", view_model=collection_view_model)
+        for document in documents:
+            card = Card()
+            card.listName = document["status"]
+            card.name = document["title"]
+            card.description = document["description"]
+            card.id = str(document["_id"]).strip("'")
+            card.idShort = card.id[:5]
+            cardList.append(card)
+        
+        cardList_view_model = ViewModel(cardList)
+        
+        return render_template("index.html", view_model=cardList_view_model)
+
 
     @app.route("/add", methods=["POST"])
     def add_Task():
