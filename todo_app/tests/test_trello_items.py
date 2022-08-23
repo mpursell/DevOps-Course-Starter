@@ -2,6 +2,7 @@ import string
 import pytest
 import requests
 from todo_app.data.trello_items import *
+from todo_app_data.controller import *
 
 
 class StubResponse:
