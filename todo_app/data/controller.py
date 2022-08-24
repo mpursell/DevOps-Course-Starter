@@ -147,7 +147,7 @@ def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
         card.name = document["title"]
         card.description = document["description"]
         card.id = str(document["_id"]).strip("'")
-        card.idShort = card.id[:5]
+        card.idShort = card.id[:7]
         cardList.append(card)
 
     return cardList
@@ -176,5 +176,6 @@ def get_item(collection, id: str) -> object:
         card.listName = returnedDocument["status"]
 
         return card
+
     except:
         return None
