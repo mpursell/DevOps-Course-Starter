@@ -153,7 +153,7 @@ def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
     return cardList
 
 
-def get_item(collection, id: str) -> object:
+def get_item(collection: pymongo.cursor.Cursor, id: str) -> object:
     """
     Fetches the MongoDB document with the specified ID.
 
@@ -179,3 +179,9 @@ def get_item(collection, id: str) -> object:
 
     except:
         return None
+
+def updateTask(collection: pymongo.cursor.Cursor, id, status: str) -> pymongo.results.UpdateResult:
+
+    update = collection.update_one({"_id": ObjectId(f'{id}')},{'$set':{'status': f'{status}'}})
+     
+    return update
