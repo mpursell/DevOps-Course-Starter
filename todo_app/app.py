@@ -65,9 +65,6 @@ def create_app():
         collection = todo.todo
         collection.insert_one(document)
 
-        # listId = get_list_by_name(list)
-        # add_item(title, description, listId)
-
         return redirect("/")
 
     @app.route("/task/", methods=["GET"])
@@ -75,7 +72,7 @@ def create_app():
 
         documentCollection = todo.todo
         taskId = request.args.get("taskId")
-        task = get_item(documentCollection, taskId)
+        task = getItem(documentCollection, taskId)
 
         return render_template("task.html", task=task, taskId=task.id)
 
@@ -87,7 +84,7 @@ def create_app():
         collection = todo.todo
         newStatus = request.args.get("taskStatus")
         taskId = request.args.get("taskId")
-        taskId = str(taskId)
+        
 
         updateTask(collection, taskId, newStatus)
 

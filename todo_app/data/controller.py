@@ -153,7 +153,7 @@ def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
     return cardList
 
 
-def get_item(collection: pymongo.cursor.Cursor, id: str) -> object:
+def getItem(collection: pymongo.cursor.Cursor, id: str) -> object:
     """
     Fetches the MongoDB document with the specified ID.
 
