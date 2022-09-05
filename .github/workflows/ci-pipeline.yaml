@@ -40,6 +40,7 @@ jobs:
     name: Azure Container Service Publish
     runs-on: ubuntu-latest
     environment: Build and Test environment
+    needs: docker
     steps:
       - name: Azure Container Service Publish
         #uses: actions/checkout@v2
