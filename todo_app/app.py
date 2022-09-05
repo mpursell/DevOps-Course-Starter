@@ -48,7 +48,7 @@ def create_app():
             card.id = str(document["_id"]).strip("'")
             card.idShort = card.id[:5]
             cardList.append(card)
-        
+
         cardList_view_model = ViewModel(cardList)
 
         return render_template("index.html", view_model=cardList_view_model)
@@ -84,7 +84,6 @@ def create_app():
         collection = todo.todo
         newStatus = request.args.get("taskStatus")
         taskId = request.args.get("taskId")
-        
 
         updateTask(collection, taskId, newStatus)
 

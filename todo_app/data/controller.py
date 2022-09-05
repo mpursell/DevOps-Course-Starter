@@ -180,8 +180,13 @@ def getItem(collection: pymongo.cursor.Cursor, id: str) -> object:
     except:
         return None
 
-def updateTask(collection: pymongo.cursor.Cursor, id, status: str) -> pymongo.results.UpdateResult:
 
-    update = collection.update_one({"_id": ObjectId(f'{id}')},{'$set':{'status': f'{status}'}})
-     
+def updateTask(
+    collection: pymongo.cursor.Cursor, id, status: str
+) -> pymongo.results.UpdateResult:
+
+    update = collection.update_one(
+        {"_id": ObjectId(f"{id}")}, {"$set": {"status": f"{status}"}}
+    )
+
     return update
