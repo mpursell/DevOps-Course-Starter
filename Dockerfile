@@ -12,8 +12,7 @@ RUN apt update -y &&\
     #curl -o get-poetry.py https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py &&\
     curl -o get-poetry.py https://install.python-poetry.org/ &&\
     chmod +x get-poetry.py &&\ 
-    python get-poetry.py &&\
-    #. /root/.local/bin/poetry/env
+    python get-poetry.py
 
 COPY . /usr/src/todo_app
 
