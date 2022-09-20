@@ -27,25 +27,17 @@ def mock_getItems() -> list[object]:
     ]
 
 
-def mock_add_item(title, description, listId) -> dict:
+def mock_addItem(title, description, listId) -> dict:
 
     mockItem = {"title": "title", "description": "description", "listId": "listID"}
 
     return mockItem
 
 
-def mock_get_list_by_name(listName: str) -> str:
-
-    return "listName"
-
-
 def mock_getItem(collection, taskId):
 
     return StubResponse("name", "1", "123", "5678", "desc", "9999", "/tasks/?taskId=1")
 
-
-def mock_complete_item(taskid, listid):
-    pass
 
 
 @pytest.fixture
@@ -79,7 +71,7 @@ def test_index_page(monkeypatch, client):
     assert response.status == "200 OK"
 
 
-def test_add_task(monkeypatch, client):
+def test_addItem(monkeypatch, client):
 
     # arrange
 
@@ -92,7 +84,7 @@ def test_add_task(monkeypatch, client):
     assert response.status == "302 FOUND"
 
 
-def test_get_task(monkeypatch, client):
+def test_getItem(monkeypatch, client):
 
     # arrange
 
@@ -103,7 +95,7 @@ def test_get_task(monkeypatch, client):
     assert response.status == "200 OK"
 
 
-def test_complete_task(monkeypatch, client):
+def test_updateTask(monkeypatch, client):
 
     # arrange
     monkeypatch.setattr("todo_app.app.get_list_by_name", mock_get_list_by_name)
