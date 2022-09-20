@@ -5,6 +5,7 @@ import requests
 from dotenv import load_dotenv, find_dotenv
 import mongomock
 from todo_app import app
+from todo_app.data.viewmodel import ViewModel
 
 
 class StubResponse:
@@ -114,3 +115,11 @@ def test_complete_task(monkeypatch, client):
     # act
     response = client.get("/")
     assert response.status == "200 OK"
+
+# def test_ViewModel():
+#     """check to instantiate ViewModel and that items property is there"""
+#     # Act
+#     view = ViewModel(stub_view_model)
+
+#     # Assert
+#     assert view.items

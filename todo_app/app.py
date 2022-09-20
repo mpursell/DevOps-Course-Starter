@@ -3,9 +3,9 @@ from flask import render_template
 from flask import request
 
 from todo_app.flask_config import Config
-from todo_app.data.trello_items import *
-from todo_app.data.controller import *
+from todo_app.data.db_service import *
 from werkzeug.utils import redirect
+from todo_app.data.viewmodel import ViewModel
 
 import logging
 import os
@@ -38,16 +38,16 @@ def create_app():
         documents = collection.find()
         #
 
-        cardList = []
+        cardList: list = getItems(documents)
 
-        for document in documents:
-            card = Card()
-            card.listName = document["status"]
-            card.name = document["title"]
-            card.description = document["description"]
-            card.id = str(document["_id"]).strip("'")
-            card.idShort = card.id[:5]
-            cardList.append(card)
+        # for document in documents:
+        #     card = Card()
+        #     card.listName = document["status"]
+        #     card.name = document["title"]
+        #     card.description = document["description"]
+        #     card.id = str(document["_id"]).strip("'")
+        #     card.idShort = card.id[:5]
+        #     cardList.append(card)
 
         cardList_view_model = ViewModel(cardList)
 
@@ -62,8 +62,9 @@ def create_app():
 
         document = {"title": title, "description": description, "status": listName}
 
-        collection = todo.todo
-        collection.insert_one(document)
+        addItem(document, collection = todo.todo)
+        
+       
 
         return redirect("/")
 
