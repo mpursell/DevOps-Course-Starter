@@ -62,9 +62,7 @@ def create_app():
 
         document = {"title": title, "description": description, "status": listName}
 
-        addItem(document, collection = todo.todo)
-        
-       
+        addItem(document, collection=todo.todo)
 
         return redirect("/")
 

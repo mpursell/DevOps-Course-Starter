@@ -39,7 +39,6 @@ def mock_getItem(collection, taskId):
     return StubResponse("name", "1", "123", "5678", "desc", "9999", "/tasks/?taskId=1")
 
 
-
 @pytest.fixture
 def client():
 
@@ -107,6 +106,7 @@ def test_updateTask(monkeypatch, client):
     # act
     response = client.get("/")
     assert response.status == "200 OK"
+
 
 # def test_ViewModel():
 #     """check to instantiate ViewModel and that items property is there"""

@@ -106,6 +106,9 @@ def updateTask(
 
     return update
 
-def addItem(document, collection: pymongo.cursor.Cursor) -> pymongo.results.InsertOneResult:
-     result = collection.insert_one(document)
-     return result
+
+def addItem(
+    document, collection: pymongo.cursor.Cursor
+) -> pymongo.results.InsertOneResult:
+    result = collection.insert_one(document)
+    return result
