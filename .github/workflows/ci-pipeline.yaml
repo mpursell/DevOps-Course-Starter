@@ -37,9 +37,19 @@ jobs:
         SLACK_MESSAGE: 'Build and test workflow running'
         SLACK_TITLE: 'Build and Test Notification'
 
+  azurePublish:
+    name: Azure Container Service Publish
+    runs-on: ubuntu-latest
+    environment: Build and Test environment
+    needs: docker
+    steps:
+      - name: Azure Container Service Publish
+        #uses: actions/checkout@v2
+        run: curl -dH -X POST ${{ secrets.AZURE_WEBHOOK_URL }}
+
   docker:
     needs: build
-    if: ${{github.ref_name == 'master'}}
+    if: ${{github.ref_name == 'module10'}}
     runs-on: ubuntu-latest
     environment: Build and Test environment
     steps:

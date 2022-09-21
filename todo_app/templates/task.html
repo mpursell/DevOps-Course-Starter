@@ -7,18 +7,18 @@
     <p class="lead">Just another to-do app.</p>
   </div>
 
-  <div class="row">
-    <div class="col-md">
+  <div class="row pb-4 pt-4"></div>
+    <div class="col-md-8">
       <h2>{{task.name}}</h2>
       <p>{{task.description}}</p>
       <br>
       <p>Status: {{task.listName}}</p>
       <br>
-      <a href = "{{url_for('update_Task', taskId=taskId, taskStatus='To Do')}}">Set task status to "To-Do"</a>
-      <br>
-      <a href = "{{url_for('update_Task', taskId=taskId, taskStatus='Doing')}}">Set task status to "Doing"</a>
-      <br>
-      <a href = "{{url_for('update_Task', taskId=taskId, taskStatus='Done')}}">Complete Task</a>
+    
+      <a class="btn btn-danger" href="{{url_for('update_Task', taskId=taskId, taskStatus='To-Do')}}">To-Do</a>
+      <a class="btn btn-warning" href="{{url_for('update_Task', taskId=taskId, taskStatus='Doing')}}">Doing</a>
+      <a class="btn btn-success" href="{{url_for('update_Task', taskId=taskId, taskStatus='Done')}}">Done</a>
+
     </div>
   </div>
 {% endblock %}

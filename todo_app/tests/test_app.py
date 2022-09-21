@@ -3,7 +3,9 @@ import pytest
 import os
 import requests
 from dotenv import load_dotenv, find_dotenv
+import mongomock
 from todo_app import app
+from todo_app.data.viewmodel import ViewModel
 
 
 class StubResponse:
@@ -18,32 +20,23 @@ class StubResponse:
         self.taskUrl = taskUrl
 
 
-def mock_get_items() -> list[object]:
+def mock_getItems(documentList) -> list[object]:
 
     return [
         StubResponse("name", "1", "123", "5678", "desc", "9999", "/tasks/?taskId=1")
     ]
 
 
-def mock_add_item(title, description, listId) -> dict:
+def mock_addItem(document, collection) -> dict:
 
     mockItem = {"title": "title", "description": "description", "listId": "listID"}
 
     return mockItem
 
 
-def mock_get_list_by_name(listName: str) -> str:
-
-    return "listName"
-
-
-def mock_get_item(taskId):
+def mock_getItem(collection, taskId):
 
     return StubResponse("name", "1", "123", "5678", "desc", "9999", "/tasks/?taskId=1")
-
-
-def mock_complete_item(taskid, listid):
-    pass
 
 
 @pytest.fixture
@@ -53,13 +46,14 @@ def client():
     file_path = find_dotenv(".env.test", usecwd=True)
     load_dotenv(file_path, override=True)
 
-    # create the app
-    test_app = app.create_app()
+    with mongomock.patch(servers=(("fakemongo.com", 27017),)):
+        # create the app
+        test_app = app.create_app()
 
-    # use the app to create a test_client that be used in the tests
+        # use the app to create a test_client that be used in the tests
 
-    with test_app.test_client() as client:
-        yield client
+        with test_app.test_client() as client:
+            yield client
 
 
 def test_index_page(monkeypatch, client):
@@ -69,19 +63,18 @@ def test_index_page(monkeypatch, client):
     # Note - can't use directly imported modules like:
     # todo_app.data.trello_items.get_items
 
-    monkeypatch.setattr("todo_app.app.get_items", mock_get_items)
+    monkeypatch.setattr("todo_app.app.getItems", mock_getItems)
 
     # act
     response = client.get("/")
     assert response.status == "200 OK"
 
 
-def test_add_task(monkeypatch, client):
+def test_addItem(monkeypatch, client):
 
     # arrange
 
-    monkeypatch.setattr("todo_app.app.get_list_by_name", mock_get_list_by_name)
-    monkeypatch.setattr("todo_app.app.add_item", mock_add_item)
+    monkeypatch.setattr("todo_app.app.addItem", mock_addItem)
 
     # act
     response = client.post("/add")
@@ -89,26 +82,35 @@ def test_add_task(monkeypatch, client):
     assert response.status == "302 FOUND"
 
 
-def test_get_task(monkeypatch, client):
+def test_getItem(monkeypatch, client):
 
     # arrange
 
-    monkeypatch.setattr("todo_app.app.get_item", mock_get_item)
+    monkeypatch.setattr("todo_app.app.getItem", mock_getItem)
 
     # act
     response = client.get("/task/")
     assert response.status == "200 OK"
 
 
-def test_complete_task(monkeypatch, client):
+# def test_updateTask(monkeypatch, client):
 
-    # arrange
-    monkeypatch.setattr("todo_app.app.get_list_by_name", mock_get_list_by_name)
-    monkeypatch.setattr("todo_app.app.complete_item", mock_complete_item)
+#     # arrange
 
-    # have to mock get_items for the return to the index page.
-    monkeypatch.setattr("todo_app.app.get_items", mock_get_items)
+#     monkeypatch.setattr("todo_app.app.updateTask", mock_updateTask)
 
-    # act
-    response = client.get("/")
-    assert response.status == "200 OK"
+#     # have to mock get_items for the return to the index page.
+#     monkeypatch.setattr("todo_app.app.getItems", mock_getItems)
+
+#     # act
+#     response = client.get("/")
+#     assert response.status == "200 OK"
+
+
+# def test_ViewModel():
+#     """check to instantiate ViewModel and that items property is there"""
+#     # Act
+#     view = ViewModel(stub_view_model)
+
+#     # Assert
+#     assert view.items

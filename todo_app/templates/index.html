@@ -2,19 +2,58 @@
 {% block title %}To-Do App{% endblock %}
 
 {% block content %}
+
   <div class="jumbotron">
     <h1 class="display-4">To-Do App</h1>
-    <p class="lead">Just another to-do app.</p>
+
+    <div class="row pb-4 pt-4">
+
+      <div class="col-md-8">
+        <form class="form-inline" action ='/add' method='POST'>
+            
+              <div class="form-group pr-2">
+                <input type="text" class="form-control" name='title' placeholder='New task title' required> 
+              </div>
+              <div class="form-group pr-2">
+                <input type="text" class="form-control" name='description' placeholder="Description" required> 
+              </div>
+              <div class="form-group pr-2">
+                <select class="form-control" name="listName">
+                  <option value="To-Do">To-Do</option>
+                  <option value="Doing">Doing</option>
+                  <option value="Done">Done</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary"><b>Create Task</b></button>
+        
+        </form>
+      </div>
+    </div>
+  
   </div>
+  <container>
+    
+    <div class="row">
+      <div class="col-md">
 
-  <div class="row">
-    <div class="col-md">
-
-      <h4>To-do</h4>
-      {% for card in view_model.items %}
-        {% if card.listName == 'To Do'%}
-        <li><b>List: </b>{{card.listName}}</br> 
-          <b>ID: </b>{{card.idShort}}</br>
+        <h4>To-do</h4>
+        {% for card in view_model.items %}
+          {% if card.listName == 'To-Do'%} 
+            <!--<b>ID: </b>{{card.idShort}}</br>-->
+            <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
+            <b>Task Description: </b>{{card.description}}</br>
+          </li>
+          <br>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        </div>
+        <div class="col-md">
+        <h4>Doing</h4>
+        {% for card in view_model.items %}
+        {% if card.listName == 'Doing'%} 
+        <!-- <b>ID: </b>{{card.idShort}}</br>-->
           <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
           <b>Task Description: </b>{{card.description}}</br>
         </li>
@@ -23,54 +62,24 @@
         {% endfor %}
       </ul>
       </div>
-      <div class="col-md">
-      <h4>Doing</h4>
-      {% for card in view_model.items %}
-      {% if card.listName == 'Doing'%} 
-        <b>ID: </b>{{card.idShort}}</br>
-        <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
-        <b>Task Description: </b>{{card.description}}</br>
-      </li>
-      <br>
-        {% endif %}
-      {% endfor %}
-    </ul>
-    </div>
 
-    <div class="col-md">
-      <h4>Done</h4>
-      {% for card in view_model.items %}
-      {% if card.listName == 'Done'%}
-        <b>ID: </b>{{card.idShort}}</br>
-        <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
-        <b>Task Description: </b>{{card.description}}</br>
-      </li>
-      <br>
-        {% endif %}
-      {% endfor %}
-    </ul>
+      <div class="col-md">
+        <h4>Done</h4>
+        {% for card in view_model.items %}
+        {% if card.listName == 'Done'%}
+          <!--<b>ID: </b>{{card.idShort}}</br>-->
+          <b>Task Name: </b><a href = "{{url_for('get_Task', taskId=card.id, taskName=card.name, taskListName=card.listName, taskDescription=card.description)}}">{{card.name}}</a></br>
+          <b>Task Description: </b>{{card.description}}</br>
+        </li>
+        <br>
+          {% endif %}
+        {% endfor %}
       </ul>
+        </ul>
+      </div>
+          
+  
+      </div>
     </div>
-        <form action ='/add' method='POST'>
-          <fieldset>
-            <legend>Add Task</legend>
-            <input type="text" name='title' required> 
-            </br>
-            </br>
-            <legend>Add Description</legend>
-            <textarea rows="5" cols="25" name='description' required></textarea>
-            </br>
-            </br>
-            <legend>Add Task Status</legend>
-            <input type="radio" value="To Do" name="listName" > To Do</br>
-            <input type="radio" value="Doing" name="listName"> Doing</br>
-            <input type="radio" value="Done" name="listName"> Done</br>
-            </br>
-            </br>
-            <button>Add Task</button>
-          </fieldset>
-        </form>
- 
-    </div>
-  </div>
+  </container>
 {% endblock %}
