@@ -79,12 +79,3 @@ jobs:
         TAG_NAME: "latest"
         BUILDX: "true"
 
-  azurePublish:
-    name: Azure Container Service Publish
-    runs-on: ubuntu-latest
-    environment: Build and Test environment
-    needs: docker
-    steps:
-      - name: Azure Container Service Publish
-        run: curl -dH -X POST ${{ secrets.AZURE_WEBHOOK_URL }}
-
