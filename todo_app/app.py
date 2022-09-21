@@ -39,16 +39,6 @@ def create_app():
         #
 
         cardList: list = getItems(documents)
-
-        # for document in documents:
-        #     card = Card()
-        #     card.listName = document["status"]
-        #     card.name = document["title"]
-        #     card.description = document["description"]
-        #     card.id = str(document["_id"]).strip("'")
-        #     card.idShort = card.id[:5]
-        #     cardList.append(card)
-
         cardList_view_model = ViewModel(cardList)
 
         return render_template("index.html", view_model=cardList_view_model)
@@ -69,23 +59,22 @@ def create_app():
     @app.route("/task/", methods=["GET"])
     def get_Task():
 
-        documentCollection = todo.todo
         taskId = request.args.get("taskId")
-        task = getItem(documentCollection, taskId)
+        task = getItem(collection=todo.todo, taskId=taskId)
 
         return render_template("task.html", task=task, taskId=task.id)
 
     @app.route("/update/", methods=["GET", "PUT"])
     def update_Task():
         """
-        Not required for module 2 task, just added for practice
+        Updates a task to a given status
         """
-        collection = todo.todo
-        newStatus = request.args.get("taskStatus")
-        taskId = request.args.get("taskId")
 
-        updateTask(collection, taskId, newStatus)
-
+        updateTask(
+            collection=todo.todo,
+            id=request.args.get("taskId"),
+            status=request.args.get("taskStatus"),
+        )
         return redirect("/")
 
     return app

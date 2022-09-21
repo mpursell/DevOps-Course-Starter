@@ -1,11 +1,9 @@
 from __future__ import annotations
 from abc import ABC
-import requests
-import os
+from unicodedata import name
 import pymongo
 from bson import ObjectId
 from todo_app.data.card import Card
-from todo_app.data.viewmodel import ViewModel
 
 
 class DatabaseAbstract(ABC):
@@ -57,18 +55,26 @@ def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
     cardList = []
 
     for document in documentList:
-        card = Card()
-        card.listName = document["status"]
-        card.name = document["title"]
-        card.description = document["description"]
-        card.id = str(document["_id"]).strip("'")
-        card.idShort = card.id[:7]
+
+        listName = document["status"]
+        name = document["title"]
+        description = document["description"]
+        id = str(document["_id"]).strip("'")
+        idShort = id[:7]
+
+        card = Card(
+            name=name,
+            listName=listName,
+            description=description,
+            id=id,
+            idShort=idShort,
+        )
         cardList.append(card)
 
     return cardList
 
 
-def getItem(collection: pymongo.cursor.Cursor, id: str) -> object:
+def getItem(collection: pymongo.cursor.Cursor, taskId: str) -> Card:
     """
     Fetches the MongoDB document with the specified ID.
 
@@ -81,18 +87,30 @@ def getItem(collection: pymongo.cursor.Cursor, id: str) -> object:
         or None if no items match the specified ID.
     """
 
-    returnedDocument = collection.find_one({"_id": ObjectId(id)})
+    returnedDocument = collection.find_one({"_id": ObjectId(taskId)})
+
+    print(f"returned document:{returnedDocument}")
 
     try:
-        card = Card()
-        card.id = returnedDocument["_id"]
-        card.description = returnedDocument["description"]
-        card.name = returnedDocument["title"]
-        card.listName = returnedDocument["status"]
+
+        id = returnedDocument["_id"]
+        description = returnedDocument["description"]
+        name = returnedDocument["title"]
+        listName = returnedDocument["status"]
+        idShort = str(id)[:7]
+
+        card = Card(
+            name=name,
+            description=description,
+            listName=listName,
+            id=id,
+            idShort=idShort,
+        )
 
         return card
 
-    except:
+    except Exception as e:
+        print(e)
         return None
 
 
