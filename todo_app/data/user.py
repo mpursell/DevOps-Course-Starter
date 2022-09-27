@@ -7,18 +7,15 @@ class User(UserMixin):
 
     def __init__(self, id: str):
         self.id = id
-        
-      
+
+
+users: list[dict] = [
+            {'id':'2429045', 
+            'role': ('writer', 'reader')}
+                ] 
 
         
 def check_role(id: str, desired_role: str):
-
-    print(current_user.id)
-
-    users: list[dict] = [
-            {'id':'2429045', 
-            'role': ('writer', 'reader')}
-                ]
 
     for user in users:
 
@@ -36,4 +33,41 @@ def check_role(id: str, desired_role: str):
             #return "not authorised"
 
 
+
+def writer_required(func):
+    def wrapper():
+        id = current_user.id
+
+        for user in users:
+
+            # need the type casting to str here
+            if str(user['id']) == str(id):
+                assigned_role: tuple = user['role']
+                if 'writer' in user['role']:
+                    return func()
+                else:
+                    print(f'Assigned role: {assigned_role} does not match "writer"')
+                    abort(403)   
+             
+    return wrapper
+
+
+def reader_required(func):
+    def wrapper():
+        id = current_user.id
+
+        for user in users:
+
+            # need the type casting to str here
+            if str(user['id']) == str(id):
+                assigned_role: tuple = user['role']
+                if 'reader' in user['role']:
+                    # run and return the value of the passed-in function
+                    return func()
+                else:
+                    print(f'Assigned role: {assigned_role} does not match "reader"')
+                    abort(403)   
+
+    # need to return the wrapper function       
+    return wrapper
 

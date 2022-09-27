@@ -1,3 +1,4 @@
+from csv import writer
 from flask import Flask, abort
 from flask import render_template
 from flask import request
@@ -5,9 +6,9 @@ from flask import request
 from werkzeug.utils import redirect
 from todo_app.flask_config import Config
 from todo_app.data.db_service import *
-from todo_app.data.user import User, check_role
+from todo_app.data.user import User, check_role, writer_required, reader_required
 from todo_app.data.viewmodel import ViewModel
-from flask_login import LoginManager, login_required, login_user, current_user
+from flask_login import LoginManager, login_required, login_user
 
 import logging
 import os
@@ -70,7 +71,7 @@ def create_app():
 
         return render_template("index.html", view_model=cardList_view_model)
 
-    
+    @writer_required
     @app.route("/add", methods=["POST"])
     @login_required
     def add_Task():
@@ -85,7 +86,7 @@ def create_app():
 
         return redirect("/")
 
-    
+    @reader_required
     @app.route("/task/", methods=["GET"])
     @login_required
     def get_Task():
@@ -95,7 +96,7 @@ def create_app():
 
         return render_template("task.html", task=task, taskId=task.id)
 
-    
+    @writer_required
     @app.route("/update/", methods=["GET", "PUT"])
     @login_required
     def update_Task():
