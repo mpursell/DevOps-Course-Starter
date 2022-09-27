@@ -1,6 +1,5 @@
 from __future__ import annotations
 from abc import ABC
-from unicodedata import name
 import pymongo
 from bson import ObjectId
 from todo_app.data.card import Card
@@ -36,6 +35,7 @@ class AppDatabase(DatabaseAbstract):
 
     # Connect to database
     def connectDatabase(self, databaseName):
+        
         client = pymongo.MongoClient(self._connectionString)
         applicationDB = client[databaseName]
         return applicationDB
@@ -89,8 +89,6 @@ def getItem(collection: pymongo.cursor.Cursor, taskId: str) -> Card:
 
     returnedDocument = collection.find_one({"_id": ObjectId(taskId)})
 
-    print(f"returned document:{returnedDocument}")
-
     try:
 
         id = returnedDocument["_id"]
@@ -109,6 +107,7 @@ def getItem(collection: pymongo.cursor.Cursor, taskId: str) -> Card:
 
         return card
 
+    # send exception to web server console
     except Exception as e:
         print(e)
         return None
@@ -128,5 +127,6 @@ def updateTask(
 def addItem(
     document, collection: pymongo.cursor.Cursor
 ) -> pymongo.results.InsertOneResult:
+
     result = collection.insert_one(document)
     return result
