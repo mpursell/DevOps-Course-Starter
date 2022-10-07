@@ -35,7 +35,7 @@ class AppDatabase(DatabaseAbstract):
 
     # Connect to database
     def connectDatabase(self, databaseName):
-        
+
         client = pymongo.MongoClient(self._connectionString)
         applicationDB = client[databaseName]
         return applicationDB
