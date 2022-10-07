@@ -3,47 +3,65 @@ from flask import abort
 
 
 class User(UserMixin):
-    
-    users: list[dict] = [{"id": "2429045", "role": "reader"}]
-    role: str = ''
-
     def __init__(self, id: str):
         self.id = id
 
-    def check_role(self, desired_role:str):
 
-        for user in self.users:
+users: list[dict] = [{"id": "2429045", "role": ("writer", "reader")}]
 
-            # need the type casting to str here
-            if str(user["id"]) == str(self.id):
-                assigned_role: tuple = user["role"]
-                if desired_role == user["role"]:
-                    self.role = user['role']
-                    return str(user['role'])
-                else:
-                    return False
+
+def check_role(id: str, desired_role: str):
+
+    for user in users:
+
+        # need the type casting to str here
+        if str(user["id"]) == str(id):
+            assigned_role: tuple = user["role"]
+            if desired_role in user["role"]:
+                return str(desired_role)
             else:
-                print("User id not recognised")
-                return False
+                print(
+                    f"Assigned role: {assigned_role} and desired role {desired_role} do not match"
+                )
+                abort(403)
+        else:
+            print("User id not recognised")
+            abort(403)
 
 
 def writer_required(func):
     def wrapper():
-        if current_user.role == "writer":
-            return func()
-        else:
-            abort(403)
+        id = current_user.id
+
+        for user in users:
+
+            # need the type casting to str here
+            if str(user["id"]) == str(id):
+                assigned_role: tuple = user["role"]
+                if "writer" in user["role"]:
+                    return func()
+                else:
+                    print(f'Assigned role: {assigned_role} does not match "writer"')
+                    abort(403)
 
     return wrapper
 
 
 def reader_required(func):
     def wrapper():
+        id = current_user.id
 
-        if current_user.role == 'reader' or current_user.role == 'writer':
-            return func()
-        else:
-            abort(403)
+        for user in users:
+
+            # need the type casting to str here
+            if str(user["id"]) == str(id):
+                assigned_role: tuple = user["role"]
+                if "reader" in user["role"]:
+                    # run and return the value of the passed-in function
+                    return func()
+                else:
+                    print(f'Assigned role: {assigned_role} does not match "reader"')
+                    abort(403)
 
     # need to return the wrapper function
     return wrapper

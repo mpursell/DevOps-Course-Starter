@@ -23,7 +23,6 @@ class AppDatabase(DatabaseAbstract):
     def __init__(self, connectionString) -> None:
 
         self._connectionString = connectionString
-        #self._collection: pymongo.cursor.Cursor = collection
 
     @property
     def databaseName(self):
