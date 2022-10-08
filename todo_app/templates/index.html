@@ -24,8 +24,9 @@
                   <option value="Done">Done</option>
                 </select>
               </div>
-
-              <button type="submit" class="btn btn-primary"><b>Create Task</b></button>
+              {% if view_model.user_role == 'writer' %}
+                <button type="submit" class="btn btn-primary"><b>Create Task</b></button>
+              {% endif %}
         
         </form>
       </div>

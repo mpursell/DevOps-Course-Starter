@@ -7,7 +7,7 @@ from todo_app.data.card import Card
 
 
 class DatabaseAbstract(ABC):
-    # interface to describe what our database class must implement
+    # interface to describe what the database class must implement
 
     def __init__(self, connectionString) -> None:
         pass
@@ -111,6 +111,15 @@ class AppDatabase(DatabaseAbstract):
         result = self.collection.insert_one(document)
         return result
 
+    def get_user_role(self, userid):
+        
+        user = self.collection.find_one({'userid': userid})
+        if user == None:
+            new_user: pymongo.results.InsertOneResult = self.collection.insert_one({"userid": userid, "role": "reader"})
+            return new_user
+        else:
+            return user['role']
+
     def __init__(self, connectionString, database_name, collection_name) -> None:
 
         self._connectionString = connectionString
@@ -120,6 +129,9 @@ class AppDatabase(DatabaseAbstract):
 
         app_db = self.connectDatabase(database_name)
 
+        # after connecting to the db, decide whether we want to 
+        # instaniate an AppDatabase object with the application collection
+        # or the users collection. 
         if collection_name == 'todo':
             self.collection: pymongo.collection.Collection = app_db.todo
         elif collection_name == 'auth_users':

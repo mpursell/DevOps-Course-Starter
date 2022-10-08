@@ -1,18 +1,20 @@
+import logging
+import os
+import requests
+
 from flask import Flask, abort
 from flask import render_template
 from flask import request
 from flask_login import LoginManager, login_required, login_user
 
+from functools import wraps
 from todo_app.flask_config import Config
 from todo_app.data.db_service import *
-from todo_app.data.user import User, writer_required, reader_required
+from todo_app.data.user import User
 from todo_app.data.viewmodel import ViewModel
 
 from werkzeug.utils import redirect
 
-import logging
-import os
-import requests
 
 
 def create_app():
@@ -28,6 +30,8 @@ def create_app():
             level=logging.INFO,
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
+
+    app_user = User()
 
     # OAuth Login
     login_manager = LoginManager()
@@ -45,7 +49,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id: str) -> User:
-        app_user = User(user_id)
+        app_user = User()
         return app_user
 
     login_manager.init_app(app)
@@ -56,17 +60,28 @@ def create_app():
 
     #todo = AppDatabase(mongodbConnectionString).connectDatabase(applicationDatabase)
     app_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="todo")
+    user_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="auth_users")
 
     @app.route("/")
     @login_required
     def index():
         
-  
         app_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="todo")
         card_list: list = app_db.get_items()
         card_list_view_model = ViewModel(card_list)
+        card_list_view_model.user_role = app_user.role
 
         return render_template("index.html", view_model=card_list_view_model)
+
+    def writer_required(func):
+        @wraps(func)
+        def wrapper():
+            if app_user.role == 'writer':
+                return func()
+            else:        
+                abort(403)
+
+        return wrapper
 
     @writer_required
     @app.route("/add", methods=["POST"])
@@ -83,7 +98,6 @@ def create_app():
 
         return redirect("/")
 
-    @reader_required
     @app.route("/task/", methods=["GET"])
     @login_required
     def get_Task():
@@ -92,7 +106,7 @@ def create_app():
         #task = getItem(collection=todo.todo, taskId=taskId)
         task = app_db.get_item(taskId)
 
-        return render_template("task.html", task=task, taskId=task.id)
+        return render_template("task.html", task=task, taskId=task.id, user=app_user)
 
     @writer_required
     @app.route("/update/", methods=["GET", "PUT"])
@@ -141,13 +155,12 @@ def create_app():
             "https://api.github.com/user", headers=fetch_user_headers
         ).json()
 
-        app_user = User(id=github_user["id"])
-
+        #app_user = User(id=github_user["id"])
+        app_user.id = github_user["id"]
         login_user(app_user)
-
-        if app_user.check_role('writer') or app_user.check_role('reader'):
-            return redirect("/")
-        else:
-            abort(403)
-
+        app_user.role = user_db.get_user_role(userid=github_user["id"])
+        
+    
+        return redirect("/")
+    
     return app
