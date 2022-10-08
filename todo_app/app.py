@@ -54,21 +54,22 @@ def create_app():
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
 
-    todo = AppDatabase(mongodbConnectionString).connectDatabase(applicationDatabase)
+    #todo = AppDatabase(mongodbConnectionString).connectDatabase(applicationDatabase)
+    app_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="todo")
 
     @app.route("/")
     @login_required
     def index():
 
         # MongoClient document finding
-        collection = todo.todo
-        documents = collection.find()
+        # collection = todo.todo
+        # documents = collection.find()
         #
 
-        cardList: list = getItems(documents)
-        cardList_view_model = ViewModel(cardList)
+        card_list: list = app_db.get_items()
+        card_list_view_model = ViewModel(card_list)
 
-        return render_template("index.html", view_model=cardList_view_model)
+        return render_template("index.html", view_model=card_list_view_model)
 
     @writer_required
     @app.route("/add", methods=["POST"])
@@ -81,7 +82,7 @@ def create_app():
 
         document = {"title": title, "description": description, "status": listName}
 
-        addItem(document, collection=todo.todo)
+        addItem(document, collection=app_db.todo)
 
         return redirect("/")
 
@@ -91,7 +92,8 @@ def create_app():
     def get_Task():
 
         taskId = request.args.get("taskId")
-        task = getItem(collection=todo.todo, taskId=taskId)
+        #task = getItem(collection=todo.todo, taskId=taskId)
+        task = app_db.get_item(taskId)
 
         return render_template("task.html", task=task, taskId=task.id)
 
