@@ -1,11 +1,11 @@
 from flask import Flask, abort
 from flask import render_template
 from flask import request
-from flask_login import LoginManager, login_required, login_user, current_user
+from flask_login import LoginManager, login_required, login_user
 
 from todo_app.flask_config import Config
 from todo_app.data.db_service import *
-from todo_app.data.user import User, writer_required, reader_required
+from todo_app.data.user import User, check_role, writer_required, reader_required
 from todo_app.data.viewmodel import ViewModel
 
 from werkzeug.utils import redirect
@@ -102,17 +102,13 @@ def create_app():
         """
         Updates a task to a given status
         """
-        if current_user.role == 'writer':
-            updateTask(
-                collection=todo.todo,
-                id=request.args.get("taskId"),
-                status=request.args.get("taskStatus"),
-            )
-            return redirect("/")
-        else:
-            print(current_user.role)
-            abort(403)
-    
+
+        updateTask(
+            collection=todo.todo,
+            id=request.args.get("taskId"),
+            status=request.args.get("taskStatus"),
+        )
+        return redirect("/")
 
     @app.route("/login/callback", methods=["GET", "POST"])
     def authenticate():
@@ -149,9 +145,8 @@ def create_app():
 
         login_user(app_user)
 
-        if app_user.check_role('reader') or app_user.check_role('writer'):
-            current_user.role = app_user.role
-            return redirect('/')
+        if check_role(app_user.id, "reader") == "reader":
+            return redirect("/")
         else:
             abort(403)
 
