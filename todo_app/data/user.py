@@ -4,8 +4,6 @@ from functools import wraps
 
 
 class User(UserMixin):
-
-
     def __init__(self):
         self.id = None
         self.role = None

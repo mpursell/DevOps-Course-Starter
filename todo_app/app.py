@@ -16,7 +16,6 @@ from todo_app.data.viewmodel import ViewModel
 from werkzeug.utils import redirect
 
 
-
 def create_app():
 
     app = Flask(__name__)
@@ -58,15 +57,27 @@ def create_app():
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
 
-    #todo = AppDatabase(mongodbConnectionString).connectDatabase(applicationDatabase)
-    app_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="todo")
-    user_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="auth_users")
+    # todo = AppDatabase(mongodbConnectionString).connectDatabase(applicationDatabase)
+    app_db = AppDatabase(
+        mongodbConnectionString,
+        database_name=applicationDatabase,
+        collection_name="todo",
+    )
+    user_db = AppDatabase(
+        mongodbConnectionString,
+        database_name=applicationDatabase,
+        collection_name="auth_users",
+    )
 
     @app.route("/")
     @login_required
     def index():
-        
-        app_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="todo")
+
+        app_db = AppDatabase(
+            mongodbConnectionString,
+            database_name=applicationDatabase,
+            collection_name="todo",
+        )
         card_list: list = app_db.get_items()
         card_list_view_model = ViewModel(card_list)
         card_list_view_model.user_role = app_user.role
@@ -76,9 +87,9 @@ def create_app():
     def writer_required(func):
         @wraps(func)
         def wrapper():
-            if app_user.role == 'writer':
+            if app_user.role == "writer":
                 return func()
-            else:        
+            else:
                 abort(403)
 
         return wrapper
@@ -103,7 +114,7 @@ def create_app():
     def get_Task():
 
         taskId = request.args.get("taskId")
-        #task = getItem(collection=todo.todo, taskId=taskId)
+        # task = getItem(collection=todo.todo, taskId=taskId)
         task = app_db.get_item(taskId)
 
         return render_template("task.html", task=task, taskId=task.id, user=app_user)
@@ -122,7 +133,6 @@ def create_app():
         )
 
         return redirect("/")
-       
 
     @app.route("/login/callback", methods=["GET", "POST"])
     def authenticate():
@@ -155,12 +165,11 @@ def create_app():
             "https://api.github.com/user", headers=fetch_user_headers
         ).json()
 
-        #app_user = User(id=github_user["id"])
+        # app_user = User(id=github_user["id"])
         app_user.id = github_user["id"]
         login_user(app_user)
         app_user.role = user_db.get_user_role(userid=github_user["id"])
-        
-    
+
         return redirect("/")
-    
+
     return app

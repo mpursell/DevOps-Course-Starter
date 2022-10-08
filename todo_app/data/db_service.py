@@ -1,6 +1,5 @@
 from __future__ import annotations
 from abc import ABC
-from codecs import getreader
 import pymongo
 from bson import ObjectId
 from todo_app.data.card import Card
@@ -21,7 +20,6 @@ class DatabaseAbstract(ABC):
 
 
 class AppDatabase(DatabaseAbstract):
-
     def connectDatabase(self, databaseName):
 
         client = pymongo.MongoClient(self._connectionString)
@@ -112,13 +110,15 @@ class AppDatabase(DatabaseAbstract):
         return result
 
     def get_user_role(self, userid):
-        
-        user = self.collection.find_one({'userid': userid})
+
+        user = self.collection.find_one({"userid": userid})
         if user == None:
-            new_user: pymongo.results.InsertOneResult = self.collection.insert_one({"userid": userid, "role": "reader"})
+            new_user: pymongo.results.InsertOneResult = self.collection.insert_one(
+                {"userid": userid, "role": "reader"}
+            )
             return new_user
         else:
-            return user['role']
+            return user["role"]
 
     def __init__(self, connectionString, database_name, collection_name) -> None:
 
@@ -129,13 +129,12 @@ class AppDatabase(DatabaseAbstract):
 
         app_db = self.connectDatabase(database_name)
 
-        # after connecting to the db, decide whether we want to 
+        # after connecting to the db, decide whether we want to
         # instaniate an AppDatabase object with the application collection
-        # or the users collection. 
-        if collection_name == 'todo':
+        # or the users collection.
+        if collection_name == "todo":
             self.collection: pymongo.collection.Collection = app_db.todo
-        elif collection_name == 'auth_users':
+        elif collection_name == "auth_users":
             self.collection: pymongo.collection.Collection = app_db.auth_users
 
         self.documents: pymongo.cursor.Cursor = self.collection.find()
-  
