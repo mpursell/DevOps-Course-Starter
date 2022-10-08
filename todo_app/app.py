@@ -5,7 +5,7 @@ from flask_login import LoginManager, login_required, login_user
 
 from todo_app.flask_config import Config
 from todo_app.data.db_service import *
-from todo_app.data.user import User, check_role, writer_required, reader_required
+from todo_app.data.user import User, writer_required, reader_required
 from todo_app.data.viewmodel import ViewModel
 
 from werkzeug.utils import redirect
@@ -60,12 +60,9 @@ def create_app():
     @app.route("/")
     @login_required
     def index():
-
-        # MongoClient document finding
-        # collection = todo.todo
-        # documents = collection.find()
-        #
-
+        
+  
+        app_db = AppDatabase(mongodbConnectionString, database_name=applicationDatabase, collection_name="todo")
         card_list: list = app_db.get_items()
         card_list_view_model = ViewModel(card_list)
 
@@ -82,7 +79,7 @@ def create_app():
 
         document = {"title": title, "description": description, "status": listName}
 
-        addItem(document, collection=app_db.todo)
+        app_db.add_item(document)
 
         return redirect("/")
 
@@ -105,12 +102,13 @@ def create_app():
         Updates a task to a given status
         """
 
-        updateTask(
-            collection=todo.todo,
+        app_db.update_task(
             id=request.args.get("taskId"),
             status=request.args.get("taskStatus"),
         )
+
         return redirect("/")
+       
 
     @app.route("/login/callback", methods=["GET", "POST"])
     def authenticate():
@@ -147,7 +145,7 @@ def create_app():
 
         login_user(app_user)
 
-        if check_role(app_user.id, "reader") == "reader":
+        if app_user.check_role('writer') or app_user.check_role('reader'):
             return redirect("/")
         else:
             abort(403)

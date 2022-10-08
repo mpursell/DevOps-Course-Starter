@@ -21,18 +21,7 @@ class DatabaseAbstract(ABC):
 
 
 class AppDatabase(DatabaseAbstract):
-    
 
-    @property
-    def databaseName(self):
-        return self._databaseName
-
-    @databaseName.setter
-    def databaseName(self, value):
-        self._databaseName = value
-        return self._databaseName
-
-    # Connect to database
     def connectDatabase(self, databaseName):
 
         client = pymongo.MongoClient(self._connectionString)
@@ -109,6 +98,18 @@ class AppDatabase(DatabaseAbstract):
             print(e)
             return None
 
+    def update_task(self, id, status: str) -> pymongo.results.UpdateResult:
+
+        update = self.collection.update_one(
+            {"_id": ObjectId(id)}, {"$set": {"status": f"{status}"}}
+        )
+
+        return update
+
+    def add_item(self, document) -> pymongo.results.InsertOneResult:
+
+        result = self.collection.insert_one(document)
+        return result
 
     def __init__(self, connectionString, database_name, collection_name) -> None:
 
@@ -125,101 +126,4 @@ class AppDatabase(DatabaseAbstract):
             self.collection: pymongo.collection.Collection = app_db.auth_users
 
         self.documents: pymongo.cursor.Cursor = self.collection.find()
-
-      
-        #self.card_list = self.get_items()
   
-    
-        
-
-
-
-def getItems(documentList: pymongo.cursor.Cursor) -> list[object]:
-
-    """
-    Gets a list of documents
-
-    Args:
-        documentList: a pymongo Cursor from the database
-
-    Returns:
-        cardList: a list of Card objects with attributes added.
-    """
-    cardList = []
-
-    for document in documentList:
-
-        listName = document["status"]
-        name = document["title"]
-        description = document["description"]
-        id = str(document["_id"]).strip("'")
-        idShort = id[:7]
-
-        card = Card(
-            name=name,
-            listName=listName,
-            description=description,
-            id=id,
-            idShort=idShort,
-        )
-        cardList.append(card)
-
-    return cardList
-
-
-def getItem(collection: pymongo.cursor.Cursor, taskId: str) -> Card:
-    """
-    Fetches the MongoDB document with the specified ID.
-
-    Args:
-        id: The ID of the item.
-        collection: the MongoDB document collection object
-
-    Returns:
-        card: the card representation of the MongoDB document,
-        or None if no items match the specified ID.
-    """
-
-    returnedDocument = collection.find_one({"_id": ObjectId(taskId)})
-
-    try:
-
-        id = returnedDocument["_id"]
-        description = returnedDocument["description"]
-        name = returnedDocument["title"]
-        listName = returnedDocument["status"]
-        idShort = str(id)[:7]
-
-        card = Card(
-            name=name,
-            description=description,
-            listName=listName,
-            id=id,
-            idShort=idShort,
-        )
-
-        return card
-
-    # send exception to web server console
-    except Exception as e:
-        print(e)
-        return None
-
-
-def updateTask(
-    collection: pymongo.cursor.Cursor, id, status: str
-) -> pymongo.results.UpdateResult:
-
-    update = collection.update_one(
-        {"_id": ObjectId(id)}, {"$set": {"status": f"{status}"}}
-    )
-
-    return update
-
-
-def addItem(
-    document, collection: pymongo.cursor.Cursor
-) -> pymongo.results.InsertOneResult:
-
-    result = collection.insert_one(document)
-    return result

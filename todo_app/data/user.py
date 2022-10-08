@@ -5,28 +5,24 @@ from flask import abort
 class User(UserMixin):
     def __init__(self, id: str):
         self.id = id
+        self.users: list[dict] = [{"id": "2429045", "role": "writer"}]
+        self.role = None
 
 
-users: list[dict] = [{"id": "2429045", "role": ("writer", "reader")}]
+    def check_role(self, desired_role: str):
 
+        for user in self.users:
 
-def check_role(id: str, desired_role: str):
-
-    for user in users:
-
-        # need the type casting to str here
-        if str(user["id"]) == str(id):
-            assigned_role: tuple = user["role"]
-            if desired_role in user["role"]:
-                return str(desired_role)
+            # need the type casting to str here
+            if str(user["id"]) == str(self.id):
+                if desired_role == user["role"]:
+                    self.role = user['role']
+                    #current_user.role.append(user['role'])
+                    return str(user['role'])
+                else:
+                    return False
             else:
-                print(
-                    f"Assigned role: {assigned_role} and desired role {desired_role} do not match"
-                )
-                abort(403)
-        else:
-            print("User id not recognised")
-            abort(403)
+                return False
 
 
 def writer_required(func):
