@@ -5,7 +5,7 @@ import requests
 from flask import Flask, abort
 from flask import render_template
 from flask import request
-from flask_login import LoginManager, login_required, login_user
+from flask_login import LoginManager, login_required, login_user, current_user
 
 from functools import wraps
 from todo_app.flask_config import Config
@@ -30,7 +30,7 @@ def create_app():
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
 
-    app_user = User()
+    #app_user = User()
 
     # OAuth Login
     login_manager = LoginManager()
@@ -46,18 +46,11 @@ def create_app():
             f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={callback_uri}"
         )
 
-    @login_manager.user_loader
-    def load_user(user_id: str) -> User:
-        app_user = User()
-        return app_user
-
-    login_manager.init_app(app)
 
     # MongoDB connection and setup
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
 
-    # todo = AppDatabase(mongodbConnectionString).connectDatabase(applicationDatabase)
     app_db = AppDatabase(
         mongodbConnectionString,
         database_name=applicationDatabase,
@@ -68,6 +61,28 @@ def create_app():
         database_name=applicationDatabase,
         collection_name="auth_users",
     )
+
+
+    @login_manager.user_loader
+    def load_user(user_id: str) -> User:
+
+        user_lookup: dict = user_db.get_user(user_id)
+
+        if user_lookup:
+            app_user = User(user_id)
+            app_user.role = user_lookup['role']
+        else:
+            app_user = User(user_id)
+            app_user.role = user_db.get_user_role(user_id)
+
+        # DEBUGGING OUTPUT
+        print(f"inside load_user: {app_user.id}")
+        print(f"inside load_user: {app_user.role}")
+        return app_user
+        
+
+
+    login_manager.init_app(app)
 
     @app.route("/")
     @login_required
@@ -80,22 +95,26 @@ def create_app():
         )
         card_list: list = app_db.get_items()
         card_list_view_model = ViewModel(card_list)
-        card_list_view_model.user_role = app_user.role
+        card_list_view_model.user_role = current_user.role
+        
+        # DEBUGGING OUTPUT
+        print(f"inside index: {current_user.role}")
+        print(f"inside index: {current_user.role}")
 
         return render_template("index.html", view_model=card_list_view_model)
 
     def writer_required(func):
         @wraps(func)
         def wrapper():
-            if app_user.role == "writer":
+            if current_user.role == "writer":
                 return func()
             else:
                 abort(403)
 
         return wrapper
 
-    @writer_required
     @app.route("/add", methods=["POST"])
+    @writer_required
     @login_required
     def add_Task():
 
@@ -114,7 +133,6 @@ def create_app():
     def get_Task():
 
         taskId = request.args.get("taskId")
-        # task = getItem(collection=todo.todo, taskId=taskId)
         task = app_db.get_item(taskId)
 
         return render_template("task.html", task=task, taskId=task.id, user=app_user)
@@ -165,10 +183,11 @@ def create_app():
             "https://api.github.com/user", headers=fetch_user_headers
         ).json()
 
-        # app_user = User(id=github_user["id"])
-        app_user.id = github_user["id"]
-        login_user(app_user)
+        app_user = User(github_user["id"])
         app_user.role = user_db.get_user_role(userid=github_user["id"])
+        print(f"inside authenticate: {app_user.role}")
+        login_user(app_user)
+        
 
         return redirect("/")
 

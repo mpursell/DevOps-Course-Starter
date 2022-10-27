@@ -269,5 +269,9 @@ Go into the app in the Azure portal, and go to Deployment Center.  There you nee
 
 Log files can be found in the Azure portal / your web app / Log Stream, or in the Deployment Center / Logs
 
+### Mongo DB
+
+The app uses an app and a user database currently using MongoDB hosted on Azure.  In order to connect to the database, the MONGO_CONNECTION_STRING and the MONGO_DB_NAME environment variables must be set in the .env file.
+
 
 

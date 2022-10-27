@@ -132,5 +132,12 @@ geckodriver
 #secrets
 .secrets
 
+## terraform files
+.terraform
+#.terraform.lock.hcl
+*.tfstate*
+*.tfvars
+variables.tf
+
 
 

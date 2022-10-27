@@ -18,3 +18,8 @@ todoapp.service
 test_coverage.txt
 .gitignore
 README.md
+
+# terraform files
+.terraform
+.terraform.lock.hcl
+.tfstate
