@@ -30,7 +30,7 @@ def create_app():
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
 
-    #app_user = User()
+    # app_user = User()
 
     # OAuth Login
     login_manager = LoginManager()
@@ -45,7 +45,6 @@ def create_app():
         return redirect(
             f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={callback_uri}"
         )
-
 
     # MongoDB connection and setup
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
@@ -62,7 +61,6 @@ def create_app():
         collection_name="auth_users",
     )
 
-
     @login_manager.user_loader
     def load_user(user_id: str) -> User:
 
@@ -70,7 +68,7 @@ def create_app():
 
         if user_lookup:
             app_user = User(user_id)
-            app_user.role = user_lookup['role']
+            app_user.role = user_lookup["role"]
         else:
             app_user = User(user_id)
             app_user.role = user_db.get_user_role(user_id)
@@ -79,8 +77,6 @@ def create_app():
         print(f"inside load_user: {app_user.id}")
         print(f"inside load_user: {app_user.role}")
         return app_user
-        
-
 
     login_manager.init_app(app)
 
@@ -96,7 +92,7 @@ def create_app():
         card_list: list = app_db.get_items()
         card_list_view_model = ViewModel(card_list)
         card_list_view_model.user_role = current_user.role
-        
+
         # DEBUGGING OUTPUT
         print(f"inside index: {current_user.role}")
         print(f"inside index: {current_user.role}")
@@ -187,7 +183,6 @@ def create_app():
         app_user.role = user_db.get_user_role(userid=github_user["id"])
         print(f"inside authenticate: {app_user.role}")
         login_user(app_user)
-        
 
         return redirect("/")
 

@@ -3,7 +3,6 @@ from flask import abort
 from functools import wraps
 
 
-
 class User(UserMixin):
 
     role = ""
@@ -19,9 +18,6 @@ class User(UserMixin):
     def is_authenticated(self):
         """Return True if the user is authenticated."""
         return self.authenticated
-    
+
     def __init__(self, user_id: str):
         self.id: str = user_id
-        
-        
-    
