@@ -137,7 +137,7 @@ geckodriver
 #.terraform.lock.hcl
 *.tfstate*
 *.tfvars
-variables.tf
+
 
 
 
