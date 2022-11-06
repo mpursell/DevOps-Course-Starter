@@ -19,7 +19,7 @@ data "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_service_plan" "TerraformOpenCohort21MichaelPursellWebappServicePlan" {
-  name                = "${var.prefix}terraformed-asp"
+  name                = "${var.prefix}-asp"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
   os_type             = "Linux"
@@ -28,7 +28,7 @@ resource "azurerm_service_plan" "TerraformOpenCohort21MichaelPursellWebappServic
 }
 
 resource "azurerm_linux_web_app" "TerraformOpenCohort21MichaelPursellWebapp" {
-  name                = "${var.prefix}-TerraformOpenCohort21MichaelPursellWebapp"
+  name                = "${var.prefix}-OpenCohort21MichaelPursellWebapp"
   location            = data.azurerm_resource_group.main.location
   resource_group_name = data.azurerm_resource_group.main.name
   service_plan_id     = azurerm_service_plan.TerraformOpenCohort21MichaelPursellWebappServicePlan.id
@@ -46,13 +46,16 @@ resource "azurerm_linux_web_app" "TerraformOpenCohort21MichaelPursellWebapp" {
     "MONGODB_NAME"               = resource.azurerm_cosmosdb_mongo_database.terraformtodoappdb0822.name
     "GH_CLIENTID"                = var.GH_CLIENTID
     "GH_CLIENTSECRET"            = var.GH_ClIENTSECRET
-    "CALLBACK_URI"               = var.CALLBACK_URI
-    sensitive                    = true
+    "CALLBACK_URI"               = "terraform-OpenCohort21MichaelPursellWebapp/login/callback"
+    "FLASK_APP"                  = var.FLASK_APP
+    "FLASK_ENV"                  = var.FLASK_ENV
+    "SECRET_KEY"                 = var.SECRET_KEY
+
   }
 }
 
 resource "azurerm_cosmosdb_account" "terraformcomosdbaccmp0822" {
-  name                = "${var.prefix}-terraformcomosdbaccmp0822"
+  name                = "${var.prefix}-comosdbaccmp0822"
   location            = "uksouth"
   resource_group_name = data.azurerm_resource_group.main.name
   kind                = "MongoDB"
@@ -81,7 +84,7 @@ resource "azurerm_cosmosdb_account" "terraformcomosdbaccmp0822" {
 }
 
 resource "azurerm_cosmosdb_mongo_database" "terraformtodoappdb0822" {
-  name                = "${var.prefix}terraformtodoappdb0822"
+  name                = "${var.prefix}todoappdb0822"
   resource_group_name = data.azurerm_resource_group.main.name
   account_name        = resource.azurerm_cosmosdb_account.terraformcomosdbaccmp0822.name
   lifecycle {
