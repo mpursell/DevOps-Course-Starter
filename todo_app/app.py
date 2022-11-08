@@ -48,11 +48,16 @@ def create_app():
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
 
-    app_db = AppDatabase(
-        mongodbConnectionString,
-        database_name=applicationDatabase,
-        collection_name="todo",
-    )
+    try:
+        app_db = AppDatabase(
+            mongodbConnectionString,
+            database_name=applicationDatabase,
+            collection_name="todo",
+        )
+    except:
+        print(f"application db name is {applicationDatabase}")
+        raise Exception("database connection exception")
+        
     user_db = AppDatabase(
         mongodbConnectionString,
         database_name=applicationDatabase,
