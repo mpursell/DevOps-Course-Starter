@@ -117,7 +117,6 @@ class AppDatabase(DatabaseAbstract):
             new_user: pymongo.results.InsertOneResult = self.collection.insert_one(
                 {"userid": userid, "role": "reader"}
             )
-            # return new_user["role"]
             return "reader"
         else:
             return user["role"]

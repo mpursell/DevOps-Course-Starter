@@ -30,7 +30,6 @@ def create_app():
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
 
-    # app_user = User()
 
     # OAuth Login
     login_manager = LoginManager()
@@ -73,9 +72,6 @@ def create_app():
             app_user = User(user_id)
             app_user.role = user_db.get_user_role(user_id)
 
-        # DEBUGGING OUTPUT
-        print(f"inside load_user: {app_user.id}")
-        print(f"inside load_user: {app_user.role}")
         return app_user
 
     login_manager.init_app(app)
@@ -92,10 +88,6 @@ def create_app():
         card_list: list = app_db.get_items()
         card_list_view_model = ViewModel(card_list)
         card_list_view_model.user_role = current_user.role
-
-        # DEBUGGING OUTPUT
-        print(f"inside index: {current_user.role}")
-        print(f"inside index: {current_user.role}")
 
         return render_template("index.html", view_model=card_list_view_model)
 

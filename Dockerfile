@@ -26,7 +26,7 @@ CMD ["./docker-entrypoint.sh"]
 
 FROM base as development
 RUN /root/.local/bin/poetry install --no-interaction
-EXPOSE 5001
+EXPOSE 5000
 # run flask via a shell script for dev work
 CMD ["./docker-entrypoint-dev.sh"]
 

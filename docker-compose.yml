@@ -19,7 +19,7 @@ services:
     image: todo-app:dev
     container_name: todo_app_dev
     ports:
-      - "5001:5000"
+      - "5000:5000"
     env_file:
       - .env
     # want to mount the current directory so we can make code changes
