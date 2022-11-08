@@ -8,11 +8,11 @@ terraform {
   }
 
   backend "azurerm" {
-        resource_group_name  = "tfstate"
-        storage_account_name = "tfstate23188"
-        container_name       = "tfstate"
-        key                  = "terraform.tfstate"
-    }
+    resource_group_name  = "tfstate"
+    storage_account_name = "tfstate23188"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
@@ -49,8 +49,8 @@ resource "azurerm_linux_web_app" "TerraformOpenCohort21MichaelPursellWebapp" {
   }
   app_settings = {
     "DOCKER_REGISTRY_SERVER_URL" = "https://index.docker.io"
-    "MONGODB_CONNECTION_STRING"  = resource.azurerm_cosmosdb_account.terraformcomosdbaccmp0822.connection_strings[0]
-    "MONGODB_NAME"               = resource.azurerm_cosmosdb_mongo_database.terraformtodoappdb0822.name
+    "MONGO_CONN_STRING"          = resource.azurerm_cosmosdb_account.terraformcomosdbaccmp0822.connection_strings[0]
+    "MONGO_DB_NAME"              = resource.azurerm_cosmosdb_mongo_database.terraformtodoappdb0822.name
     "GH_CLIENTID"                = var.GH_CLIENTID
     "GH_CLIENTSECRET"            = var.GH_ClIENTSECRET
     "CALLBACK_URI"               = "terraform-OpenCohort21MichaelPursellWebapp/login/callback"
