@@ -30,7 +30,6 @@ def create_app():
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
 
-
     # OAuth Login
     login_manager = LoginManager()
 

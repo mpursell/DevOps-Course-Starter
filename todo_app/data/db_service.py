@@ -27,8 +27,9 @@ class AppDatabase(DatabaseAbstract):
             applicationDB = client[databaseName]
             return applicationDB
         except:
-            raise Exception(f"The application database name is: {applicationDB}\n The type is {type(applicationDB)}")
-
+            raise Exception(
+                f"The application database name is: {applicationDB}\n The type is {type(applicationDB)}"
+            )
 
     def get_items(self) -> list[object]:
 
