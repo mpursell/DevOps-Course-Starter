@@ -78,4 +78,36 @@ jobs:
         TAG_NAME: "latest"
         BUILDX: "true"
 
+  # terraformInit:
+  #   steps:
+  #   - name: Run terraform init
+  #     run: terraform init
+  #     shell: bash
+
+  # terraformApply:
+  #     apply:
+  #       runs-on: ubuntu-latest
+  #       name: Apply terraform
+  #       steps:
+  #         - name: Checkout
+  #           uses: actions/checkout@v3
+
+  #         - name: terraform apply
+  #           uses: dflook/terraform-apply@v1
+  #           with:
+  #             auto_approve: true
+  #             variables: 
+  #               TF_VAR_TENANT_ID = "${{ secrets.ARM_TENANT_ID }}"
+  #               TF_VAR_SUBSCRIPTION_ID = "${{ secrets.ARM_SUBSCRIPTION_ID }}"
+  #               TF_VAR_CLIENT_ID = "${{ secrets.ARM_CLIENT_ID }}"
+  #               TF_VAR_CLIENT_SECRET = "${{ secrets.ARM_SECRET_ID }}"
+
+  # webhook:
+  #   steps:
+  #   - name: Webhook
+  #     run: curl -dH -X POST "$(terraform output -raw cd_webhook)"
+  #     shell: bash
+
+
+
 

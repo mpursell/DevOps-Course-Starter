@@ -22,9 +22,13 @@ class DatabaseAbstract(ABC):
 class AppDatabase(DatabaseAbstract):
     def connectDatabase(self, databaseName):
 
-        client = pymongo.MongoClient(self._connectionString)
-        applicationDB = client[databaseName]
-        return applicationDB
+        try:
+            client = pymongo.MongoClient(self._connectionString)
+            applicationDB = client[databaseName]
+            return applicationDB
+        except:
+            raise Exception(f"The application database name is: {applicationDB}\n The type is {type(applicationDB)}")
+
 
     def get_items(self) -> list[object]:
 
