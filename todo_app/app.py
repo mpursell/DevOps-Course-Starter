@@ -57,7 +57,7 @@ def create_app():
     except:
         print(f"application db name is {applicationDatabase}")
         raise Exception("database connection exception")
-        
+
     user_db = AppDatabase(
         mongodbConnectionString,
         database_name=applicationDatabase,

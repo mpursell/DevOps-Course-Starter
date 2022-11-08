@@ -24,7 +24,6 @@ class AppDatabase(DatabaseAbstract):
         client = pymongo.MongoClient(self._connectionString)
         applicationDB = client[databaseName]
         return applicationDB
-    
 
     def get_items(self) -> list[object]:
 
