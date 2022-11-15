@@ -127,7 +127,7 @@ def create_app():
         taskId = request.args.get("taskId")
         task = app_db.get_item(taskId)
 
-        return render_template("task.html", task=task, taskId=task.id, user=app_user)
+        return render_template("task.html", task=task, taskId=task.id, user=current_user)
 
     @writer_required
     @app.route("/update/", methods=["GET", "PUT"])
