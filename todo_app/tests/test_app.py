@@ -63,54 +63,52 @@ def test_index_page(monkeypatch, client):
     # Note - can't use directly imported modules like:
     # todo_app.data.trello_items.get_items
 
-    monkeypatch.setattr("todo_app.app.getItems", mock_getItems)
-
     # act
     response = client.get("/")
-    assert response.status == "200 OK"
-
-
-def test_addItem(monkeypatch, client):
-
-    # arrange
-
-    monkeypatch.setattr("todo_app.app.addItem", mock_addItem)
-
-    # act
-    response = client.post("/add")
-    # check for a 302 since our app redirects us to / after the POST
     assert response.status == "302 FOUND"
 
 
-def test_getItem(monkeypatch, client):
-
-    # arrange
-
-    monkeypatch.setattr("todo_app.app.getItem", mock_getItem)
-
-    # act
-    response = client.get("/task/")
-    assert response.status == "200 OK"
-
-
-# def test_updateTask(monkeypatch, client):
+# def test_addItem(monkeypatch, client):
 
 #     # arrange
 
-#     monkeypatch.setattr("todo_app.app.updateTask", mock_updateTask)
-
-#     # have to mock get_items for the return to the index page.
-#     monkeypatch.setattr("todo_app.app.getItems", mock_getItems)
+#     monkeypatch.setattr("todo_app.app.addItem", mock_addItem)
 
 #     # act
-#     response = client.get("/")
+#     response = client.post("/add")
+#     # check for a 302 since our app redirects us to / after the POST
+#     assert response.status == "302 FOUND"
+
+
+# def test_getItem(monkeypatch, client):
+
+#     # arrange
+
+#     monkeypatch.setattr("todo_app.app.getItem", mock_getItem)
+
+#     # act
+#     response = client.get("/task/")
 #     assert response.status == "200 OK"
 
 
-# def test_ViewModel():
-#     """check to instantiate ViewModel and that items property is there"""
-#     # Act
-#     view = ViewModel(stub_view_model)
+# # def test_updateTask(monkeypatch, client):
 
-#     # Assert
-#     assert view.items
+# #     # arrange
+
+# #     monkeypatch.setattr("todo_app.app.updateTask", mock_updateTask)
+
+# #     # have to mock get_items for the return to the index page.
+# #     monkeypatch.setattr("todo_app.app.getItems", mock_getItems)
+
+# #     # act
+# #     response = client.get("/")
+# #     assert response.status == "200 OK"
+
+
+# # def test_ViewModel():
+# #     """check to instantiate ViewModel and that items property is there"""
+# #     # Act
+# #     view = ViewModel(stub_view_model)
+
+# #     # Assert
+# #     assert view.items
