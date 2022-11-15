@@ -15,6 +15,7 @@ on:
       -'logs/**'
 
 jobs:
+
   build:
     name: Build and test
     runs-on: ubuntu-latest
@@ -78,6 +79,7 @@ jobs:
         TAG_NAME: "latest"
         BUILDX: "true"
 
+
   # terraformInit:
   #   steps:
   #   - name: Run terraform init
@@ -107,6 +109,7 @@ jobs:
   #   - name: Webhook
   #     run: curl -dH -X POST "$(terraform output -raw cd_webhook)"
   #     shell: bash
+
 
 
 

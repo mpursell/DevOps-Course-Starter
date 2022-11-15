@@ -84,15 +84,10 @@
         cmd: curl -sSL https://install.python-poetry.org | python3.9 - 
     
     - name: Create app directory
-      ansible.builtin.shell:
-        cmd: sudo mkdir /opt/todoapp
-        creates: /opt/todoapp
-        executable: /bin/bash 
-
-    - name: Set app directory owner
-      ansible.builtin.shell:
-        cmd: sudo chown ec2-user /opt/todoapp
-        executable: /bin/bash
+      ansible.builtin.file:
+        path: /opt/todoapp
+        owner: ec2-user
+        state: directory
         
     - name: Git clone into /opt/todoapp if git repo doesn't exist
       ansible.builtin.shell:
