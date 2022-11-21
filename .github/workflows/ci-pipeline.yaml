@@ -97,7 +97,7 @@ jobs:
       shell: bash
 
     - name: Run terraform apply
-      run: cd ~/ && terraform apply -auto-approve
+      run: terraform apply -auto-approve
       shell: bash
       env: 
         TF_VAR_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
