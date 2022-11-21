@@ -111,7 +111,7 @@ jobs:
     environment: Build and Test environment
     steps:
     - name: Run terraform apply
-      run: terraform apply -auto-approve
+      run: cd ~/ && terraform apply -auto-approve
       shell: bash
       env: 
         TF_VAR_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
