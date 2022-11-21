@@ -81,6 +81,7 @@ jobs:
 
 
   terraformInit:
+    runs-on: ubuntu-latest
     steps:
     - name: Run terraform init
       run: terraform init
@@ -105,6 +106,7 @@ jobs:
               TF_VAR_CLIENT_SECRET = "${{ secrets.ARM_SECRET_ID }}"
 
   webhook:
+    runs-on: ubuntu-latest
     steps:
     - name: Webhook
       run: curl -dH -X POST "$(terraform output -raw cd_webhook)"
