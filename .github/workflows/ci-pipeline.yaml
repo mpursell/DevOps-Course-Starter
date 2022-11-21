@@ -98,7 +98,7 @@ jobs:
       shell: bash
     
     - name: login to Azure CLI
-      run: az login --service-principal ${{ secrets.ARM_CLIENT_ID}} -p=${{ secrets.ARM_SECRET_ID}} --tenant ${{ secrets.ARM_TENANT_ID }}
+      run: az login --service-principal -u ${{ secrets.ARM_CLIENT_ID}} -p ${{ secrets.ARM_SECRET_ID}} --tenant ${{ secrets.ARM_TENANT_ID }}
       shell: bash
 
     - name: Run terraform init
