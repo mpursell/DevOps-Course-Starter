@@ -39,3 +39,18 @@ variable "SECRET_KEY" {
   description = "Flask Secret Key"
   sensitive   = true
 }
+
+variable "client_secret" {
+  description = "Azure service principal secret"
+  sensitive   = true
+}
+
+variable "client_id" {
+  description = "Azure service principal id"
+  sensitive   = true
+}
+
+variable "tenant_id" {
+  description = "Azure tenant id"
+  sensitive   = true
+}
