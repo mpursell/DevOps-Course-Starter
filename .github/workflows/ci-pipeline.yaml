@@ -93,7 +93,7 @@ jobs:
       shell: bash
 
     - name: Run terraform init
-      run: pwd && terraform init
+      run: pwd && ls -al && terraform init
       shell: bash
 
     - name: Run terraform apply
