@@ -84,6 +84,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: Build and Test environment
     steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+
     - name: install Azure CLI
       run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
       shell: bash
