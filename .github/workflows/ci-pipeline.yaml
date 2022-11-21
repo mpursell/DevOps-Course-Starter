@@ -107,7 +107,7 @@ jobs:
 
   terraformApply:
     runs-on: ubuntu-latest
-    needs: addAzureCliToPath
+    needs: terraformInit
     environment: Build and Test environment
     steps:
     - name: Run terraform apply
