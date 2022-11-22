@@ -101,19 +101,21 @@ jobs:
       run: az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
       shell: bash
 
-     - task: AzureCLI@2
-        displayName: "Terraform"
-        inputs:
-          azureSubscription:  ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          scriptType: bash
-          addSpnToEnvironment: true
-          scriptLocation: inlineScript
-          inlineScript: |
-            export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}
-            export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }}
-            export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}
+    - task: AzureCLI@2
+      name: terraform init
+      inputs:
+        azureSubscription:  ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        scriptType: bash
+        addSpnToEnvironment: true
+        scriptLocation: inlineScript
+        inlineScript: |
+          export ARM_CLIENT_ID=${{ secrets.ARM_CLIENT_ID }}
+          export ARM_CLIENT_SECRET=${{ secrets.ARM_CLIENT_SECRET }}
+          export ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}
 
-            terraform init 
+          terraform init 
+
+    
 
     # - name: Run terraform init
     #   run: terraform init
