@@ -85,19 +85,6 @@ jobs:
     environment: Build and Test environment
     steps:
 
-    - task: Azure CLI@2
-      uses: actions/azurecli@v2
-      inputs: 
-        azureSubscription: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        scriptType: bash
-        scriptLocation: inlineScript
-        addSpnToEnvironment: true
-        inlineScript: |
-            export ARM_CLIENT_ID=$servicePrincipalId
-            export ARM_CLIENT_SECRET=$servicePrincipalKey
-            export ARM_TENANT_ID=$tenantId
-            terraform init
-
     - name: Checkout
       uses: actions/checkout@v1
       with:
@@ -111,9 +98,14 @@ jobs:
       run: export PATH=$PATH:/usr/bin/az
       shell: bash
 
-    - name: login to Azure CLI
-      run: az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
-      shell: bash
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # - name: login to Azure CLI
+    #   run: az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
+    #   shell: bash
     
     - name: Run terraform init
       run: terraform init 
