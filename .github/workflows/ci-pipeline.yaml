@@ -103,6 +103,7 @@ jobs:
 
     - task: AzureCLI@2
       name: terraform init
+      uses: actions/checkout@v1
       inputs:
         azureSubscription:  ${{ secrets.ARM_SUBSCRIPTION_ID }}
         scriptType: bash
