@@ -84,6 +84,19 @@ jobs:
     runs-on: ubuntu-latest
     environment: Build and Test environment
     steps:
+
+    - task: Azure CLI@2
+      inputs: 
+        azureSubscription: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        scriptType: bash
+        scriptLocation: inlineScript
+        addSpnToEnvironment: true
+        inlineScript: |
+            export ARM_CLIENT_ID=$servicePrincipalId
+            export ARM_CLIENT_SECRET=$servicePrincipalKey
+            export ARM_TENANT_ID=$tenantId
+            terraform init
+
     - name: Checkout
       uses: actions/checkout@v1
       with:
@@ -102,7 +115,7 @@ jobs:
       shell: bash
     
     - name: Run terraform init
-      run: terraform init
+      run: terraform init 
       shell: bash
       env: 
         TF_VAR_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
