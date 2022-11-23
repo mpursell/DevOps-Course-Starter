@@ -83,25 +83,17 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     environment: Build and Test environment
-    steps:
+    env: ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
 
+    steps:
     - name: Checkout
       uses: actions/checkout@v1
       with:
         fetch-depth: 1
 
-    # - name: install Azure CLI
-    #   run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-    #   shell: bash
-
-    # - name: install Azure CLI
-    #   run: export PATH=$PATH:/usr/bin/az
-    #   shell: bash
-
-    # # - name: Azure Login
-    # #   uses: azure/login@v1
-    # #   with:
-    # #     creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: login to Azure CLI
       run: az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
       shell: bash
@@ -109,20 +101,11 @@ jobs:
     - name: Run terraform init
       run: terraform init 
       shell: bash
-      env: 
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-
+ 
     - name: Run terraform apply
       run: terraform apply -auto-approve
       shell: bash
-      env: 
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+
     
     - name: Webhook
       run: curl -dH -X POST "$(terraform output -raw cd_webhook)"
