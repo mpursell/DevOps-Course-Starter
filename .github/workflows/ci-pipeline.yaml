@@ -82,13 +82,8 @@ jobs:
 
   terraform:
     runs-on: ubuntu-latest
-    environment: 
-      name: Build and Test environment
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-
+    environment: Build and Test environment
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -102,10 +97,22 @@ jobs:
     - name: Run terraform init
       run: terraform init 
       shell: bash
+      env:
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+
  
     - name: Run terraform apply
       run: terraform apply -auto-approve
       shell: bash
+      env:
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+
 
     
     - name: Webhook
