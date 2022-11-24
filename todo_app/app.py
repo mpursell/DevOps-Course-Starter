@@ -20,15 +20,15 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
-    # logFile = os.environ.get('LOGFILE')
-    logFile = ""
+    logFile = os.environ.get('LOGFILE')
 
-    if logFile:
-        logging.basicConfig(
-            filename=logFile,
-            level=logging.INFO,
-            format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
-        )
+
+    logging.basicConfig(
+        filename=logFile,
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
+    )
+
 
     # OAuth Login
     login_manager = LoginManager()
@@ -36,9 +36,10 @@ def create_app():
     @login_manager.unauthorized_handler
     def unauthenticated():
         # logic to redirect to GH auth flow if unauthed
-
+        
         client_id: str = os.environ.get("GH_CLIENTID")
         callback_uri = os.environ.get("CALLBACK_URI")
+        logging.info("User not logged in, redirecting to %s", callback_uri)
 
         return redirect(
             f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={callback_uri}"
@@ -47,6 +48,7 @@ def create_app():
     # MongoDB connection and setup
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
+    logging.info("Connecting to database: %s", applicationDatabase)
 
     try:
         app_db = AppDatabase(
@@ -56,13 +58,19 @@ def create_app():
         )
     except:
         print(f"application db name is {applicationDatabase}")
+        logging.error("Exception thrown when connecting to todo collection in database: %s ", applicationDatabase)
         raise Exception("database connection exception")
 
-    user_db = AppDatabase(
-        mongodbConnectionString,
-        database_name=applicationDatabase,
-        collection_name="auth_users",
-    )
+    try:
+        user_db = AppDatabase(
+            mongodbConnectionString,
+            database_name=applicationDatabase,
+            collection_name="auth_users",
+        )
+    except:
+        print(f"application db name is {applicationDatabase}")
+        logging.error("Exception thrown when connecting to users collection in database: %s ", applicationDatabase)
+        raise Exception("database connection exception")
 
     @login_manager.user_loader
     def load_user(user_id: str) -> User:
@@ -117,6 +125,7 @@ def create_app():
         document = {"title": title, "description": description, "status": listName}
 
         app_db.add_item(document)
+        logging.info("adding task: %s to: %s", document["title"], document["status"])
 
         return redirect("/")
 
@@ -179,7 +188,8 @@ def create_app():
 
         app_user = User(github_user["id"])
         app_user.role = user_db.get_user_role(userid=github_user["id"])
-        print(f"inside authenticate: {app_user.role}")
+        logging.info("user is authenticated as a: %s", app_user.role)
+
         login_user(app_user)
 
         return redirect("/")
