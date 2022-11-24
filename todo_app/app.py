@@ -20,8 +20,7 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
-    logFile = os.environ.get('LOGFILE')
-
+    logFile = os.environ.get("LOGFILE")
 
     logging.basicConfig(
         filename=logFile,
@@ -29,14 +28,13 @@ def create_app():
         format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
     )
 
-
     # OAuth Login
     login_manager = LoginManager()
 
     @login_manager.unauthorized_handler
     def unauthenticated():
         # logic to redirect to GH auth flow if unauthed
-        
+
         client_id: str = os.environ.get("GH_CLIENTID")
         callback_uri = os.environ.get("CALLBACK_URI")
         logging.info("User not logged in, redirecting to %s", callback_uri)
@@ -58,7 +56,10 @@ def create_app():
         )
     except:
         print(f"application db name is {applicationDatabase}")
-        logging.error("Exception thrown when connecting to todo collection in database: %s ", applicationDatabase)
+        logging.error(
+            "Exception thrown when connecting to todo collection in database: %s ",
+            applicationDatabase,
+        )
         raise Exception("database connection exception")
 
     try:
@@ -69,7 +70,10 @@ def create_app():
         )
     except:
         print(f"application db name is {applicationDatabase}")
-        logging.error("Exception thrown when connecting to users collection in database: %s ", applicationDatabase)
+        logging.error(
+            "Exception thrown when connecting to users collection in database: %s ",
+            applicationDatabase,
+        )
         raise Exception("database connection exception")
 
     @login_manager.user_loader
