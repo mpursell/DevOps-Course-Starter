@@ -85,16 +85,16 @@ jobs:
     environment: Build and Test environment
     
     steps:
-    - name: Checkout
+    - name: checkout code
       uses: actions/checkout@v1
       with:
         fetch-depth: 1
 
-    - name: login to Azure CLI
-      run: az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
-      shell: bash
+    # - name: login to Azure CLI
+    #   run: az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
+    #   shell: bash
     
-    - name: Run terraform init
+    - name: run terraform init
       run: terraform init 
       shell: bash
       env:
@@ -104,7 +104,7 @@ jobs:
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
 
  
-    - name: Run terraform apply
+    - name: run terraform apply
       run: terraform apply -auto-approve
       shell: bash
       env:
