@@ -116,7 +116,7 @@ jobs:
         TF_VAR_client_id: ${{ secrets.ARM_CLIENT_ID }}
         TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
         TF_VAR_GH_CLIENTID: ${{ secrets.GH_CLIENTID }}
-        TF_VAR_GH_CLIENTSECRET: ${{ secrets.GH_CLIENTSECRET }}
+        TF_VAR_GH_ClIENTSECRET: ${{ secrets.GH_CLIENTSECRET }}
         TF_VAR_DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         TF_VAR_DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         TF_VAR_FLASK_APP: ${{ secrets.FLASK_APP }}
