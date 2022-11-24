@@ -126,7 +126,7 @@ jobs:
 
     
     - name: Webhook
-      run: curl -dH -X POST "$(terraform output -raw cd_webhook)"
+      run: curl -dH -X POST "$(terraform output -raw webhook_url)"
       shell: bash
       env:
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
