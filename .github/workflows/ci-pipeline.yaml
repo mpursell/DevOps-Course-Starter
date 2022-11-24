@@ -112,6 +112,8 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_GH_CLIENTID: ${{ secrets.GH_CLIENTID }}
+        TF_VAR_GH_CLIENTSECRET: ${{ secrets.GH_CLIENTSECRET }}
 
 
     
