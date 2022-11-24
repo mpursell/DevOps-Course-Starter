@@ -112,8 +112,16 @@ jobs:
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        TF_VAR_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        TF_VAR_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
         TF_VAR_GH_CLIENTID: ${{ secrets.GH_CLIENTID }}
         TF_VAR_GH_CLIENTSECRET: ${{ secrets.GH_CLIENTSECRET }}
+        TF_VAR_DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        TF_VAR_DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        TF_VAR_FLASK_APP: ${{ secrets.FLASK_APP }}
+        TF_VAR_FLASK_ENV: ${{ secrets.FLASK_ENV }}
+        TF_VAR_SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 
     
