@@ -273,5 +273,34 @@ Log files can be found in the Azure portal / your web app / Log Stream, or in th
 
 The app uses an app and a user database currently using MongoDB hosted on Azure.  In order to connect to the database, the MONGO_CONNECTION_STRING and the MONGO_DB_NAME environment variables must be set in the .env file.
 
+## Deploying Infrastructure with Terraform
+
+The infrastructure require to host this app can be deployed with terraform. 
+
+## Cloud Setup
+
+The Terraform config is currently setup to use the [azurerm](https://www.terraform.io/docs/language/settings/backends/azurerm.html) backend, which stores the state as an encrypted Blob with the given Key within a Blob Container in a Blob Storage Account
+
+* You'll need to create an Azure storage account that holds containers / blobs.  [This link](https://docs.microsoft.com/en-us/azure/developer/terraform/store-state-in-azure-storage) will show you how to setup the storage.
+
+* A service principal will be required that has Contributor access scoped to the resource group of the storage account:
+
+```bash
+az ad sp create-for-rbac --name "<SERVICE PRINCIPAL NAME>" --role Contributor --scopes /subscriptions/<SUBSCRIPTION ID>/
+resourceGroups/<RESOURCE GROUP NAME>
+```
+
+## Terraform setup
+Make sure the subscription id, resource group, storage and container strings are all correct in the main.tf terraform config file.  You'll also need to have the following variables configured - either in a .tfvars file for local use, or in your pipeline environment:
+
+* GH_CLIENTID     = ""
+* GH_ClIENTSECRET = ""
+* DOCKER_USERNAME = ""
+* DOCKER_PASSWORD = ""
+* FLASK_APP       = ""
+* FLASK_ENV       = ""
+* SECRET_KEY      = ""
+
+**Do Not** commit your .terraform/terraform.tfstate or .tfvars file to version control. 
 
 
