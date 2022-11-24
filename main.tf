@@ -8,7 +8,7 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "tfstate"
+    resource_group_name  = "OpenCohort21_MichaelPursell_ProjectExercise"
     storage_account_name = "tfstate23188"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
