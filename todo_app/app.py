@@ -55,7 +55,6 @@ def create_app():
             collection_name="todo",
         )
     except:
-        print(f"application db name is {applicationDatabase}")
         logging.error(
             "Exception thrown when connecting to todo collection in database: %s ",
             applicationDatabase,
@@ -69,7 +68,6 @@ def create_app():
             collection_name="auth_users",
         )
     except:
-        print(f"application db name is {applicationDatabase}")
         logging.error(
             "Exception thrown when connecting to users collection in database: %s ",
             applicationDatabase,
@@ -138,8 +136,13 @@ def create_app():
     def get_Task():
 
         taskId = request.args.get("taskId")
-        task = app_db.get_item(taskId)
-
+        
+        try:
+            logging.info("Fetching task: %s", taskId)
+            task = app_db.get_item(taskId)
+        except:
+            logging.error("Error fetching task: %s", taskId)
+        
         return render_template(
             "task.html", task=task, taskId=task.id, user=current_user
         )
