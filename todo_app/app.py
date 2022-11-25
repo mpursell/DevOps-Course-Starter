@@ -12,6 +12,8 @@ from todo_app.flask_config import Config
 from todo_app.data.db_service import *
 from todo_app.data.user import User
 from todo_app.data.viewmodel import ViewModel
+from loggly.handlers import HTTPSHandler
+from logging import Formatter
 
 from werkzeug.utils import redirect
 
@@ -27,6 +29,14 @@ def create_app():
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
     )
+
+    # Setup Loggly log aggregation
+    if app.config['LOGGLY_TOKEN'] is not None:
+        handler = HTTPSHandler(f'https://logs-01.loggly.com/inputs/{app.config["LOGGLY_TOKEN"]}/tag/todo-app')
+        handler.setFormatter(
+            Formatter("[%(asctime)s] %(levelname)s in %(module)s: %(message)s")
+        )
+        app.logger.addHandler(handler)
 
     # OAuth Login
     login_manager = LoginManager()
@@ -136,13 +146,13 @@ def create_app():
     def get_Task():
 
         taskId = request.args.get("taskId")
-        
+
         try:
             logging.info("Fetching task: %s", taskId)
             task = app_db.get_item(taskId)
         except:
             logging.error("Error fetching task: %s", taskId)
-        
+
         return render_template(
             "task.html", task=task, taskId=task.id, user=current_user
         )
