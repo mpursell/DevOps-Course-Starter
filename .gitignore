@@ -125,6 +125,7 @@ env/
 ## logs ##
 *.log
 geckodriver.log
+python.conf
 
 ## web driver ##
 geckodriver

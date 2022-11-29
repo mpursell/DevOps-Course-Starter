@@ -1,6 +1,9 @@
 import logging
 import os
 import requests
+import logging.config
+import time
+import loggly.handlers
 
 from flask import Flask, abort
 from flask import render_template
@@ -17,12 +20,17 @@ from logging import Formatter
 
 from werkzeug.utils import redirect
 
+# Setup loggly log aggregation via a conf file
+# configure logging level in conf file.
+logging.config.fileConfig('python.conf')
+logging.Formatter.converter = time.gmtime
 
 def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
     logFile = os.environ.get("LOGFILE")
+    logger = logging.getLogger('myLogger')
 
     logging.basicConfig(
         filename=logFile,
@@ -30,21 +38,13 @@ def create_app():
         format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
     )
 
-    # Setup Loggly log aggregation
-    if app.config['LOGGLY_TOKEN'] is not None:
-        handler = HTTPSHandler(f'https://logs-01.loggly.com/inputs/{app.config["LOGGLY_TOKEN"]}/tag/todo-app')
-        handler.setFormatter(
-            Formatter("[%(asctime)s] %(levelname)s in %(module)s: %(message)s")
-        )
-        app.logger.addHandler(handler)
-
     # OAuth Login
     login_manager = LoginManager()
 
     @login_manager.unauthorized_handler
     def unauthenticated():
-        # logic to redirect to GH auth flow if unauthed
 
+        # logic to redirect to GH auth flow if unauthed
         client_id: str = os.environ.get("GH_CLIENTID")
         callback_uri = os.environ.get("CALLBACK_URI")
         logging.info("User not logged in, redirecting to %s", callback_uri)
@@ -56,7 +56,7 @@ def create_app():
     # MongoDB connection and setup
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
-    logging.info("Connecting to database: %s", applicationDatabase)
+    logger.info("Connecting to database: %s", applicationDatabase)
 
     try:
         app_db = AppDatabase(
@@ -65,7 +65,7 @@ def create_app():
             collection_name="todo",
         )
     except:
-        logging.error(
+        logger.error(
             "Exception thrown when connecting to todo collection in database: %s ",
             applicationDatabase,
         )
@@ -78,7 +78,7 @@ def create_app():
             collection_name="auth_users",
         )
     except:
-        logging.error(
+        logger.error(
             "Exception thrown when connecting to users collection in database: %s ",
             applicationDatabase,
         )
@@ -148,10 +148,10 @@ def create_app():
         taskId = request.args.get("taskId")
 
         try:
-            logging.info("Fetching task: %s", taskId)
+            logger.info("Fetching task: %s", taskId)
             task = app_db.get_item(taskId)
         except:
-            logging.error("Error fetching task: %s", taskId)
+            logger.error("Error fetching task: %s", taskId)
 
         return render_template(
             "task.html", task=task, taskId=task.id, user=current_user
@@ -164,11 +164,14 @@ def create_app():
         """
         Updates a task to a given status
         """
-
-        app_db.update_task(
-            id=request.args.get("taskId"),
-            status=request.args.get("taskStatus"),
-        )
+        try:
+            logger.info("Updating task %s", request.args.get("taskId"))
+            app_db.update_task(
+                id=request.args.get("taskId"),
+                status=request.args.get("taskStatus"),
+            )
+        except:
+            logger.error("Error updating task %s", request.args.get("taskId"))
 
         return redirect("/")
 
@@ -205,7 +208,7 @@ def create_app():
 
         app_user = User(github_user["id"])
         app_user.role = user_db.get_user_role(userid=github_user["id"])
-        logging.info("user is authenticated as a: %s", app_user.role)
+        logger.info("user is authenticated as a: %s", app_user.role)
 
         login_user(app_user)
 
