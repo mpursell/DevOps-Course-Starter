@@ -303,4 +303,41 @@ Make sure the subscription id, resource group, storage and container strings are
 
 **Do Not** commit your .terraform/terraform.tfstate or .tfvars file to version control. 
 
+## Logging
+
+### Local logs
+
+Local logging is written to a a ToDo_Flask.log file.  It currently logs at the INFO level.  Add this file to .gitignore, do not commit to source control. 
+
+
+### Log Aggregation
+
+Log aggregation is provided by [Loggly](https://loggly.com).  You'll need to sign up for a Loggly account, and retrieve your customer token from Loggly. Setting up logging for Python apps in covered [here](https://documentation.solarwinds.com/en/success_center/loggly/content/admin/python-http.htm?cshid=loggly_python-http).
+
+You'll need a ```python.conf``` file in the root of the project:
+
+```python
+[handlers]
+keys=HTTPSHandler
+
+[handler_HTTPSHandler]
+class=loggly.handlers.HTTPSHandler
+formatter=jsonFormat
+args=('https://logs-01.loggly.com/inputs/TOKEN/tag/python','POST')
+
+[formatters]
+keys=jsonFormat
+
+[loggers]
+keys=root
+
+[logger_root]
+handlers=HTTPSHandler
+level=INFO
+
+[formatter_jsonFormat]
+format={ "loggerName":"%(name)s", "timestamp":"%(asctime)s", "fileName":"%(filename)s", "logRecordCreationTime":"%(created)f", "functionName":"%(funcName)s", "levelNo":"%(levelno)s", "lineNo":"%(lineno)d", "time":"%(msecs)d", "levelName":"%(levelname)s", "message":"%(message)s"}
+```
+
+Replace ```TOKEN``` with your customer token from Loggly and configure the logging level you'd like with ```level={LOGLEVEL}  ```  Since the ```python.conf``` file contains your personal Loggly token, do not commit this file to source control. 
 

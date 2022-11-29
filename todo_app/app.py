@@ -22,15 +22,16 @@ from werkzeug.utils import redirect
 
 # Setup loggly log aggregation via a conf file
 # configure logging level in conf file.
-logging.config.fileConfig('python.conf')
+logging.config.fileConfig("python.conf")
 logging.Formatter.converter = time.gmtime
+
 
 def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
     logFile = os.environ.get("LOGFILE")
-    logger = logging.getLogger('myLogger')
+    logger = logging.getLogger("myLogger")
 
     logging.basicConfig(
         filename=logFile,
