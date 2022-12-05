@@ -8,7 +8,7 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "OpenCohort21_MichaelPursell_ProjectExercise"
+    resource_group_name  = "tfstate"
     storage_account_name = "tfstate23188"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
@@ -19,11 +19,6 @@ provider "azurerm" {
   features {
 
   }
-
-  subscription_id = "d33b95c7-af3c-4247-9661-aa96d47fccc0"
-  client_id = var.client_id
-  client_secret = var.client_secret
-  tenant_id =  var.tenant_id
 }
 
 data "azurerm_resource_group" "main" {
