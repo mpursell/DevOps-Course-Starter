@@ -3,6 +3,7 @@ on:
   push:
     branches:
         - 'master'
+        - 'module13'
     paths-ignore:
       -'./README.md'
       -'./tricks.yaml'
@@ -19,6 +20,7 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
