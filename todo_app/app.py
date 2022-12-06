@@ -22,23 +22,31 @@ from werkzeug.utils import redirect
 
 # Setup loggly log aggregation via a conf file
 # configure logging level in conf file.
-logging.config.fileConfig("python.conf")
-logging.Formatter.converter = time.gmtime
+
+
 
 
 def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
-    # logFile = os.environ.get("LOGFILE")
+    logFile = os.environ.get("LOGFILE")
     logger = logging.getLogger("myLogger")
 
-    # logging.basicConfig(
-    #     filename=logFile,
-    #     level=logging.INFO,
-    #     format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
-    # )
+    try:
+        # setup the logging from a configuration file
+        logging.config.fileConfig("python.conf")
+    except:
+        # otherwise fall back to specified config
+     logging.basicConfig(
+        filename=logFile,
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
+    )
 
+    logging.Formatter.converter = time.gmtime
+
+   
     # OAuth Login
     login_manager = LoginManager()
 
