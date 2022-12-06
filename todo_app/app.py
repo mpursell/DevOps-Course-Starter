@@ -35,7 +35,7 @@ def create_app():
 
     logging.basicConfig(
         filename=logFile,
-        level=logging.INFO,
+        level=logging.os.environ.get("LOG_LEVEL"),
         format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
     )
 
@@ -209,6 +209,7 @@ def create_app():
 
         app_user = User(github_user["id"])
         app_user.role = user_db.get_user_role(userid=github_user["id"])
+        logger.info("user ID is %s", app_user.id)
         logger.info("user is authenticated as a: %s", app_user.role)
 
         login_user(app_user)

@@ -111,7 +111,7 @@ class AppDatabase(DatabaseAbstract):
     def get_user_role(self, userid) -> str:
 
         user = self.collection.find_one({"userid": userid})
-        print(f"inside db_service.get_user_role: {user},{userid}")
+
         if user == None:
             new_user: pymongo.results.InsertOneResult = self.collection.insert_one(
                 {"userid": userid, "role": "reader"}
