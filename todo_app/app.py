@@ -24,8 +24,6 @@ from werkzeug.utils import redirect
 # configure logging level in conf file.
 
 
-
-
 def create_app():
 
     app = Flask(__name__)
@@ -38,15 +36,14 @@ def create_app():
         logging.config.fileConfig("python.conf")
     except:
         # otherwise fall back to specified config
-     logging.basicConfig(
-        filename=logFile,
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
-    )
+        logging.basicConfig(
+            filename=logFile,
+            level=logging.INFO,
+            format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
+        )
 
     logging.Formatter.converter = time.gmtime
 
-   
     # OAuth Login
     login_manager = LoginManager()
 
