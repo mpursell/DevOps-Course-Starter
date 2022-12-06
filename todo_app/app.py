@@ -30,14 +30,14 @@ def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
-    logFile = os.environ.get("LOGFILE")
+    # logFile = os.environ.get("LOGFILE")
     logger = logging.getLogger("myLogger")
 
-    logging.basicConfig(
-        filename=logFile,
-        level=logging.os.environ.get("LOG_LEVEL"),
-        format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
-    )
+    # logging.basicConfig(
+    #     filename=logFile,
+    #     level=logging.INFO,
+    #     format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
+    # )
 
     # OAuth Login
     login_manager = LoginManager()
