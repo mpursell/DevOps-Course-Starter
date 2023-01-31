@@ -28,7 +28,7 @@ def create_app():
     logFile = os.environ.get("LOGFILE")
     logger = logging.getLogger("myLogger")
     logLevel = os.environ.get("LOG_LEVEL")
-    
+
     try:
         if app.config["LOGGLY_TOKEN"] is not None:
             handler = HTTPSHandler(
