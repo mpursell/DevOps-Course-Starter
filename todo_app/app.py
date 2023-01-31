@@ -1,3 +1,6 @@
+"""
+Main application module
+"""
 import logging
 import logging.config
 import os
@@ -17,9 +20,6 @@ from todo_app.data.user import User
 from todo_app.data.viewmodel import ViewModel
 from todo_app.flask_config import Config
 
-# Setup loggly log aggregation via a conf file
-# configure logging level in conf file.
-
 
 def create_app():
 
@@ -28,11 +28,17 @@ def create_app():
     logFile = os.environ.get("LOGFILE")
     logger = logging.getLogger("myLogger")
     logLevel = os.environ.get("LOG_LEVEL")
+    app.logger.setLevel(logLevel)
 
     try:
-        # setup the logging from a configuration file
-        logging.config.fileConfig("python.conf")
-        logging.config._Level(logLevel)
+        if app.config['LOGGLY_TOKEN'] is not None:
+            handler = HTTPSHandler(f'https://logs-01.loggly.com/inputs/{app.config["LOGGLY_TOKEN"]}/tag/python')
+            handler.setFormatter(
+                Formatter("[%(asctime)s] %(levelname)s in %(module)s: %(message)s")
+            )
+            app.logger.addHandler(handler)
+
+
     except:
         # otherwise fall back to specified config
         logging.basicConfig(
