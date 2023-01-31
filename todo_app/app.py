@@ -1,24 +1,21 @@
 import logging
-import os
-import requests
 import logging.config
+import os
 import time
-import loggly.handlers
-
-from flask import Flask, abort
-from flask import render_template
-from flask import request
-from flask_login import LoginManager, login_required, login_user, current_user
-
 from functools import wraps
-from todo_app.flask_config import Config
+from logging import Formatter
+
+import loggly.handlers
+import requests
+from flask import Flask, abort, render_template, request
+from flask_login import LoginManager, current_user, login_required, login_user
+from loggly.handlers import HTTPSHandler
+from werkzeug.utils import redirect
+
 from todo_app.data.db_service import *
 from todo_app.data.user import User
 from todo_app.data.viewmodel import ViewModel
-from loggly.handlers import HTTPSHandler
-from logging import Formatter
-
-from werkzeug.utils import redirect
+from todo_app.flask_config import Config
 
 # Setup loggly log aggregation via a conf file
 # configure logging level in conf file.
@@ -30,10 +27,12 @@ def create_app():
     app.config.from_object(Config())
     logFile = os.environ.get("LOGFILE")
     logger = logging.getLogger("myLogger")
+    logLevel = os.environ.get("LOG_LEVEL")
 
     try:
         # setup the logging from a configuration file
         logging.config.fileConfig("python.conf")
+        logging.config._Level(logLevel)
     except:
         # otherwise fall back to specified config
         logging.basicConfig(
