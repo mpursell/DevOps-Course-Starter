@@ -1,6 +1,8 @@
 name: Continuous Integration
 on: 
   push:
+    branches:
+        - 'master'
     paths-ignore:
       -'./README.md'
       -'./tricks.yaml'
@@ -49,7 +51,6 @@ jobs:
 
   docker:
     needs: build
-    if: ${{github.ref_name == 'module12'}}
     runs-on: ubuntu-latest
     environment: Build and Test environment
     steps:

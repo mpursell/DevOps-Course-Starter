@@ -1,12 +1,14 @@
 import os
 from threading import Thread
-from todo_app import app
+
 import pytest
 import requests
-from dotenv import load_dotenv, find_dotenv
+from dotenv import find_dotenv, load_dotenv
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
+
+from todo_app import app
 
 pytest.skip(
     "Skipping... need to fix selenium geckodriver and binary location issues",

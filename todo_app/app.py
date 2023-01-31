@@ -1,44 +1,65 @@
+"""
+Main application module
+"""
 import logging
+import logging.config
 import os
-import requests
-
-from flask import Flask, abort
-from flask import render_template
-from flask import request
-from flask_login import LoginManager, login_required, login_user, current_user
-
+import time
 from functools import wraps
-from todo_app.flask_config import Config
+from logging import Formatter
+
+import loggly.handlers
+import requests
+from flask import Flask, abort, render_template, request
+from flask_login import LoginManager, current_user, login_required, login_user
+from loggly.handlers import HTTPSHandler
+from werkzeug.utils import redirect
+
 from todo_app.data.db_service import *
 from todo_app.data.user import User
 from todo_app.data.viewmodel import ViewModel
-
-from werkzeug.utils import redirect
+from todo_app.flask_config import Config
 
 
 def create_app():
 
     app = Flask(__name__)
     app.config.from_object(Config())
-    # logFile = os.environ.get('LOGFILE')
-    logFile = ""
+    logFile = os.environ.get("LOGFILE")
+    logger = logging.getLogger("myLogger")
+    logLevel = os.environ.get("LOG_LEVEL")
 
-    if logFile:
+    try:
+        if app.config["LOGGLY_TOKEN"] is not None:
+            handler = HTTPSHandler(
+                f'https://logs-01.loggly.com/inputs/{app.config["LOGGLY_TOKEN"]}/tag/python'
+            )
+            handler.setFormatter(
+                Formatter("[%(asctime)s] %(levelname)s in %(module)s: %(message)s")
+            )
+            app.logger.addHandler(handler)
+            app.logger.setLevel(f"logging.{logLevel}")
+
+    except:
+        # otherwise fall back to specified config
         logging.basicConfig(
             filename=logFile,
             level=logging.INFO,
             format="%(asctime)s %(levelname)s %(name)s %(threadName)s: %(message)s",
         )
 
+    logging.Formatter.converter = time.gmtime
+
     # OAuth Login
     login_manager = LoginManager()
 
     @login_manager.unauthorized_handler
     def unauthenticated():
-        # logic to redirect to GH auth flow if unauthed
 
+        # logic to redirect to GH auth flow if unauthed
         client_id: str = os.environ.get("GH_CLIENTID")
         callback_uri = os.environ.get("CALLBACK_URI")
+        logging.info("User not logged in, redirecting to %s", callback_uri)
 
         return redirect(
             f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={callback_uri}"
@@ -47,6 +68,7 @@ def create_app():
     # MongoDB connection and setup
     mongodbConnectionString = os.environ.get("MONGO_CONN_STRING")
     applicationDatabase = os.environ.get("MONGO_DB_NAME")
+    logger.info("Connecting to database: %s", applicationDatabase)
 
     try:
         app_db = AppDatabase(
@@ -55,14 +77,24 @@ def create_app():
             collection_name="todo",
         )
     except:
-        print(f"application db name is {applicationDatabase}")
+        logger.error(
+            "Exception thrown when connecting to todo collection in database: %s ",
+            applicationDatabase,
+        )
         raise Exception("database connection exception")
 
-    user_db = AppDatabase(
-        mongodbConnectionString,
-        database_name=applicationDatabase,
-        collection_name="auth_users",
-    )
+    try:
+        user_db = AppDatabase(
+            mongodbConnectionString,
+            database_name=applicationDatabase,
+            collection_name="auth_users",
+        )
+    except:
+        logger.error(
+            "Exception thrown when connecting to users collection in database: %s ",
+            applicationDatabase,
+        )
+        raise Exception("database connection exception")
 
     @login_manager.user_loader
     def load_user(user_id: str) -> User:
@@ -117,6 +149,7 @@ def create_app():
         document = {"title": title, "description": description, "status": listName}
 
         app_db.add_item(document)
+        logging.info("adding task: %s to: %s", document["title"], document["status"])
 
         return redirect("/")
 
@@ -125,7 +158,12 @@ def create_app():
     def get_Task():
 
         taskId = request.args.get("taskId")
-        task = app_db.get_item(taskId)
+
+        try:
+            logger.info("Fetching task: %s", taskId)
+            task = app_db.get_item(taskId)
+        except:
+            logger.error("Error fetching task: %s", taskId)
 
         return render_template(
             "task.html", task=task, taskId=task.id, user=current_user
@@ -138,11 +176,14 @@ def create_app():
         """
         Updates a task to a given status
         """
-
-        app_db.update_task(
-            id=request.args.get("taskId"),
-            status=request.args.get("taskStatus"),
-        )
+        try:
+            logger.info("Updating task %s", request.args.get("taskId"))
+            app_db.update_task(
+                id=request.args.get("taskId"),
+                status=request.args.get("taskStatus"),
+            )
+        except:
+            logger.error("Error updating task %s", request.args.get("taskId"))
 
         return redirect("/")
 
@@ -179,7 +220,9 @@ def create_app():
 
         app_user = User(github_user["id"])
         app_user.role = user_db.get_user_role(userid=github_user["id"])
-        print(f"inside authenticate: {app_user.role}")
+        logger.info("user ID is %s", app_user.id)
+        logger.info("user is authenticated as a: %s", app_user.role)
+
         login_user(app_user)
 
         return redirect("/")

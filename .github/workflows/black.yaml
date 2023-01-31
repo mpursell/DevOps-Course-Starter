@@ -1,9 +1,26 @@
 name: Lint
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+        - 'master'
+        - 'module13'
+    paths-ignore:
+      -'./README.md'
+      -'./tricks.yaml'
+      -'documentation/**'
+      -'logs/**'
+  
+  pull_request:
+    paths-ignore:
+      -'./README.md'
+      -'./tricks.yaml'
+      -'documentation/**'
+      -'logs/**'
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
