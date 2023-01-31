@@ -1,9 +1,11 @@
-from flask import request
-import pytest
 import os
-import requests
-from dotenv import load_dotenv, find_dotenv
+
 import mongomock
+import pytest
+import requests
+from dotenv import find_dotenv, load_dotenv
+from flask import request
+
 from todo_app import app
 from todo_app.data.viewmodel import ViewModel
 

@@ -1,6 +1,7 @@
-from flask_login import UserMixin, current_user
-from flask import abort
 from functools import wraps
+
+from flask import abort
+from flask_login import UserMixin, current_user
 
 
 class User(UserMixin):

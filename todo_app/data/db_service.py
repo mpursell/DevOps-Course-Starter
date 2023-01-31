@@ -1,7 +1,10 @@
 from __future__ import annotations
+
 from abc import ABC
+
 import pymongo
 from bson import ObjectId
+
 from todo_app.data.card import Card
 
 
